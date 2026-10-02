@@ -384,12 +384,63 @@
     return svg;
   }
 
+  /**
+   * A short run of one-question rounds using the shared challenge engine.
+   * questions: challenge objects (or functions that return one).
+   */
+  function quizRounds(box, done, questions, { label = 'Question', nextLabel = 'Next ▶', finalText } = {}) {
+    let i = 0;
+    show();
+    function show() {
+      box.innerHTML = '';
+      const area = el('div', { class: 'challenge' });
+      const result = el('div', { class: 'round-result', 'aria-live': 'polite' });
+      box.append(el('p', { class: 'round-label' }, `${label} ${i + 1} of ${questions.length}`), area, result);
+      const q = typeof questions[i] === 'function' ? questions[i]() : questions[i];
+      say(q.say || q.question);
+      MA.renderChallenge(area, q, {
+        onCorrect: ({ feedbackEl, challenge }) => {
+          feedbackEl.className = 'challenge__feedback is-success';
+          feedbackEl.innerHTML = '';
+          feedbackEl.append(el('span', {}, `🎉 ${pick(PRAISE)}`), el('small', {}, challenge.explain || ''));
+          MA.launchConfetti(20);
+          say(challenge.explain || pick(PRAISE));
+          nextOrDone(result, i === questions.length - 1, nextLabel, () => { i += 1; show(); }, done, finalText);
+        }
+      });
+    }
+  }
+
+  /** The modules before and after this one in the same place on the map. */
+  function findNeighbours(moduleId) {
+    for (const loc of MA.LOCATIONS || []) {
+      const built = loc.modules.filter(m => m.url && !m.progressId);
+      const i = built.findIndex(m => `${loc.id}/${m.id}` === moduleId);
+      if (i >= 0) return { place: loc, prev: built[i - 1] || null, next: built[i + 1] || null };
+    }
+    return { place: null, prev: null, next: null };
+  }
+
   /* ------------------------------------------------------------
      Module page shell: step bar + stage card
      Needs #stepper and #stage-panel in the page.
      ------------------------------------------------------------ */
   function startModule({ moduleId, stages, stageStars = 2, backUrl = '../index.html#adventure' }) {
     let current = 0;
+    const neighbours = findNeighbours(moduleId);
+
+    /** "◀ Previous adventure | 🗺️ Map | Next adventure ▶" bar under the activity. */
+    function renderAdventureNav() {
+      const panel = $('#stage-panel');
+      if (!panel || $('.adventure-nav')) return;
+      const link = (m, dir) => el('a', { class: `adventure-nav__link adventure-nav__link--${dir}`, href: `../${m.url}` },
+        el('small', {}, dir === 'prev' ? '◀ Previous adventure' : 'Next adventure ▶'),
+        el('strong', {}, `${m.icon} ${m.title}`));
+      panel.after(el('nav', { class: 'adventure-nav', 'aria-label': 'Other adventures here' },
+        neighbours.prev ? link(neighbours.prev, 'prev') : el('span', { class: 'adventure-nav__spacer' }),
+        el('a', { class: 'adventure-nav__map', href: backUrl }, el('span', { 'aria-hidden': 'true' }, '🗺️'), ' Map'),
+        neighbours.next ? link(neighbours.next, 'next') : el('span', { class: 'adventure-nav__spacer' })));
+    }
 
     function renderStepper() {
       const list = $('#stepper');
@@ -416,12 +467,20 @@
       const panel = $('#stage-panel');
       panel.innerHTML = '';
       const body = el('div', { class: 'stage-body' });
-      const next = button(
-        isLast ? '🗺️ Back to the map' : `Next: ${stages[index + 1].icon} ${stages[index + 1].label}`,
-        'btn btn--sun stage-next',
-        () => { if (isLast) window.location.href = backUrl; else goTo(index + 1); }
-      );
-      next.hidden = !MA.isStageDone(moduleId, stage.id);
+      const done = MA.isStageDone(moduleId, stage.id);
+      const after = neighbours.next;
+      // ◀ Back: previous step (or the map from the first step)
+      const back = index > 0
+        ? button(`◀ Back: ${stages[index - 1].label}`, 'btn btn--ghost stage-back', () => goTo(index - 1))
+        : el('a', { class: 'btn btn--ghost stage-back', href: backUrl }, '◀ Map');
+      // Next ▶: always available; turns yellow once this step is done
+      const nextLabel = !isLast
+        ? `Next: ${stages[index + 1].icon} ${stages[index + 1].label} ▶`
+        : after ? `Next adventure: ${after.icon} ${after.title} ▶` : '🗺️ Back to the map ▶';
+      const next = button(nextLabel, `btn ${done ? 'btn--sun is-ready' : 'btn--ghost'} stage-next`, () => {
+        if (!isLast) goTo(index + 1);
+        else window.location.href = after ? `../${after.url}` : backUrl;
+      });
 
       panel.append(
         el('header', { class: 'stage-head' },
@@ -430,7 +489,7 @@
             el('p', { class: 'stage-head__step' }, `Step ${index + 1} of ${stages.length} · ${stage.label}`),
             el('h2', { class: 'stage-head__title', tabindex: '-1' }, stage.title))),
         body,
-        el('footer', { class: 'stage-foot' }, next)
+        el('footer', { class: 'stage-foot' }, back, next)
       );
 
       stage.render(body, () => finishStage(stage, next));
@@ -444,10 +503,13 @@
     function finishStage(stage, next) {
       const first = MA.completeStage(moduleId, stage.id);
       if (first && stage.id !== 'master') MA.addStars(stageStars, { message: `${stage.label} complete!` });
-      next.hidden = false;
+      next.classList.remove('btn--ghost');
+      next.classList.add('btn--sun', 'is-ready');
       pulse(next, 'pop-in');
       renderStepper();
     }
+
+    renderAdventureNav();
 
     // Open the first step not yet done
     const firstOpen = stages.findIndex(stage => !MA.isStageDone(moduleId, stage.id));
@@ -528,7 +590,7 @@
   window.ModuleKit = {
     MA, $, $$, rnd, pick, shuffle, wait, reducedMotion, say, PRAISE,
     el, button, instruction, pulse, optionsFor, track, choices, digitsHTML, blocksHTML, trueFalse,
-    nextOrDone, dragMatch, fractionSVG, sortZones,
+    nextOrDone, dragMatch, fractionSVG, sortZones, quizRounds,
     makeDraggable, startModule, masterFinale, runMaster
   };
 })();

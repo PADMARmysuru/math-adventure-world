@@ -26,6 +26,9 @@ document.documentElement.classList.add('js');
    ============================================================== */
 
 const STORAGE_KEY = 'maw-progress-v1';
+
+/** Shown at the bottom of every page. Change this one line to update the credit everywhere. */
+const SITE_CREDIT = 'Created by Mrs. Padma R';
 const DAILY_REWARD_STARS = 5;
 const PRACTICE_REWARD_STARS = 1;
 const DISCOVERY_REWARD_GEMS = 1;
@@ -80,8 +83,8 @@ const LOCATIONS = [
     tip: 'How long? How heavy? How full?',
     milo: 'Measure Mountain! Which is longer? Which is heavier?',
     modules: [
-      soon('Length', '📏'), soon('Mass', '⚖️'), soon('Capacity', '🥛'),
-      soon('Temperature', '🌡️'), soon('Time', '⏱️')
+      ready('Length', '📏', { id: 'length', url: 'measure-mountain/length.html', steps: 6 }), ready('Mass', '⚖️', { id: 'mass', url: 'measure-mountain/mass.html', steps: 6 }), ready('Capacity', '🥛', { id: 'capacity', url: 'measure-mountain/capacity.html', steps: 6 }),
+      ready('Temperature', '🌡️', { id: 'temperature', url: 'measure-mountain/temperature.html', steps: 6 }), ready('Time', '⏱️', { id: 'time', url: 'measure-mountain/time.html', steps: 6 })
     ]
   },
   {
@@ -152,7 +155,13 @@ const BADGES = [
   { id: 'rhythm-ranger',   icon: '🔁', name: 'Rhythm Ranger',   how: 'Master Repeating Patterns in Pattern Forest' },
   { id: 'shape-pattern-pro', icon: '🔷', name: 'Shape Pattern Pro', how: 'Master Shape Patterns in Pattern Forest' },
   { id: 'logic-legend',    icon: '🧩', name: 'Logic Legend',    how: 'Master Logic Challenges in Pattern Forest' },
-  { id: 'pattern-forest-hero', icon: '🌳', name: 'Pattern Forest Hero', how: 'Master every module in Pattern Forest' }
+  { id: 'pattern-forest-hero', icon: '🌳', name: 'Pattern Forest Hero', how: 'Master every module in Pattern Forest' },
+  { id: 'length-legend',   icon: '📏', name: 'Length Legend',   how: 'Master Length on Measure Mountain' },
+  { id: 'mass-master',     icon: '⚖️', name: 'Mass Master',     how: 'Master Mass on Measure Mountain' },
+  { id: 'capacity-captain', icon: '🥛', name: 'Capacity Captain', how: 'Master Capacity on Measure Mountain' },
+  { id: 'temperature-tracker', icon: '🌡️', name: 'Temperature Tracker', how: 'Master Temperature on Measure Mountain' },
+  { id: 'time-keeper',     icon: '⏱️', name: 'Time Keeper',     how: 'Master Time on Measure Mountain' },
+  { id: 'measure-mountain-hero', icon: '🏔️', name: 'Measure Mountain Hero', how: 'Master every module on Measure Mountain' }
 ];
 
 const MILO_LINES = {
@@ -1097,7 +1106,18 @@ function initGrownUps() {
    12. START-UP + PUBLIC API
    ============================================================== */
 
+/** Add the creator's name to the footer on every page. */
+function addCredit() {
+  const footer = $('.site-footer');
+  if (!footer || $('.site-footer__credit', footer)) return;
+  const credit = document.createElement('p');
+  credit.className = 'site-footer__credit';
+  credit.textContent = `✨ ${SITE_CREDIT}`;
+  footer.appendChild(credit);
+}
+
 function init() {
+  addCredit();
   renderMap();
   initMapInteractions();
   initDialog();

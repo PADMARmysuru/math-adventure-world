@@ -659,6 +659,7 @@ a.module-chip:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--sun
 .site-footer { padding: 2rem 1rem; text-align: center; background: var(--ink); color: #fff; }
 .site-footer p { margin: 0 0 .3rem; }
 .site-footer__small { font-size: .9rem; opacity: .8; }
+.site-footer__credit { margin-top: .6rem !important; padding-top: .6rem; border-top: 1px solid rgba(255, 255, 255, .2); font-weight: 800; font-size: 1rem; }
 
 /* ---------- 14. Toasts + confetti ---------- */
 .toast-region {
