@@ -27,16 +27,6 @@
   background: #FFF6D9; font-size: 2.6rem; font-weight: 900; color: var(--ink-soft);
 }
 .sign-gap.is-filled { border-style: solid; border-color: var(--purple); background: var(--purple-soft); color: var(--purple-dark); }
-.sign-pad { display: flex; justify-content: center; gap: .8rem; }
-.sign-btn {
-  width: 84px; height: 76px; border: 0; border-radius: 22px;
-  background: var(--purple); color: #fff; font-size: 2.6rem; font-weight: 900; cursor: pointer;
-  box-shadow: 0 6px 0 var(--purple-dark);
-}
-.sign-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--purple-dark); }
-.sign-btn.is-right { background: var(--correct); box-shadow: 0 6px 0 #1D6E3B; }
-.sign-btn.is-wrong { background: #ECECF2; color: var(--ink-soft); box-shadow: none; text-decoration: line-through; animation: shake .45s ease; }
-.sign-btn:disabled { cursor: default; }
 .sign-key { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1rem; margin: 0; padding: 0; list-style: none; font-weight: 800; color: var(--ink-soft); }
 .sign-key strong { display: inline-grid; place-items: center; width: 1.8em; height: 1.8em; border-radius: 8px; background: var(--purple-soft); color: var(--purple-dark); }
 
@@ -82,7 +72,6 @@
 @media (max-width: 680px) {
   .cmp-card { min-width: 130px; min-height: 140px; }
   .sign-gap { width: 62px; height: 62px; font-size: 2.1rem; }
-  .sign-btn { width: 72px; height: 66px; font-size: 2.2rem; }
   .pan { min-width: 112px; min-height: 104px; padding: .5rem; }
   .pan--left { margin-left: -30px; }
   .pan--right { margin-right: -30px; }

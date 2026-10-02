@@ -1,0 +1,29 @@
+/* 🔁 Number Island → Number Patterns — styles unique to this module (shared: ../module.css) */
+.pattern-row { display: flex; justify-content: center; width: 100%; }
+.jumps { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; }
+.jump { min-width: 52px; padding: .2rem .5rem; border-radius: 999px; background: #F1F0F6; color: var(--ink-soft); font-weight: 900; text-align: center; }
+.jump.is-shown { background: var(--purple); color: #fff; animation: pop .3s ease; }
+.sign-btn--rule { width: auto; min-width: 84px; padding: 0 .8rem; font-size: 1.9rem; }
+
+/* Odd and even houses */
+.houses { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; width: 100%; max-width: 620px; }
+.house {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  min-height: 170px; padding: .8rem .5rem; border: 4px solid; border-radius: 24px 24px 18px 18px; cursor: pointer;
+}
+.house--odd { border-color: #FF8A3D; background: #FFF0E3; }
+.house--even { border-color: #2F6FD6; background: #E6F0FF; }
+.house.is-over { transform: scale(1.03); }
+.house.is-bad { animation: shake .45s ease; }
+.house__label { margin: 0; font-weight: 900; font-size: 1.3rem; }
+.house__items { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.tile.is-placed { width: 56px; height: 56px; font-size: 1.4rem; box-shadow: 0 3px 0 var(--sun-dark); pointer-events: none; }
+
+/* Keypad */
+.keypad { display: grid; grid-template-columns: repeat(3, 72px); gap: .5rem; justify-content: center; }
+.key { height: 60px; border: 0; border-radius: 16px; background: #fff; color: var(--ink); font-size: 1.6rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #CFCBE6; border: 3px solid #CFCBE6; }
+.key:active { transform: translateY(3px); box-shadow: none; }
+.key--ok { background: var(--correct); border-color: var(--correct); color: #fff; box-shadow: 0 4px 0 #1D6E3B; }
+.key--back { background: #F1F0F6; }
+.mystery-box.is-active { border-color: var(--purple); background: var(--purple-soft); border-style: solid; }
+.mystery-given { display: grid; place-items: center; }

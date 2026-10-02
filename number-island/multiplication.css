@@ -1,0 +1,35 @@
+/* ✖️ Number Island → Multiplication — styles unique to this module (shared: ../module.css) */
+
+/* Array builder */
+.array-ctrls { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem 1.4rem; }
+.array-ctrl { display: flex; align-items: center; gap: .5rem; padding: .4rem .7rem; border-radius: 18px; background: #F3F1FF; }
+.array-ctrl__label { font-weight: 900; }
+.array-grid {
+  --cols: 1;
+  display: grid; grid-template-columns: repeat(var(--cols), 30px); gap: 4px; justify-content: center;
+  padding: .8rem; border-radius: 18px; background: #FFF6D6; min-height: 52px;
+}
+.array-dot { display: grid; place-items: center; width: 30px; height: 30px; font-size: 1.3rem; animation: pop .25s ease; }
+
+/* Equal-group pictures */
+.mini-groups { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.mini-group { padding: .2rem .4rem; border: 3px solid #E3DCC8; border-radius: 999px; background: #FFFDF6; font-size: 1.05rem; letter-spacing: -2px; }
+
+/* Bingo */
+.bingo-call { display: flex; align-items: center; gap: .8rem; padding: .6rem 1.4rem; border: 4px solid var(--purple); border-radius: 24px; background: var(--purple-soft); }
+.bingo-call__label { font-weight: 900; color: var(--ink-soft); }
+.bingo-call__fact { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 900; }
+.bingo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; width: 100%; max-width: 360px; }
+.bingo__cell {
+  position: relative; aspect-ratio: 1; border: 4px solid #CFCBE6; border-radius: 20px;
+  background: #fff; color: var(--ink); font-size: 1.9rem; font-weight: 900; cursor: pointer; box-shadow: 0 6px 0 #CFCBE6;
+}
+.bingo__cell.is-hit { border-color: var(--correct); background: var(--correct-soft); box-shadow: 0 6px 0 var(--correct); }
+.bingo__cell.is-hit::after { content: "✓"; position: absolute; top: 4px; right: 8px; font-size: 1rem; color: var(--correct); }
+.bingo__cell.is-oops { animation: shake .45s ease; }
+
+@media (max-width: 680px) {
+  .array-grid { grid-template-columns: repeat(var(--cols), 24px); gap: 3px; padding: .6rem; }
+  .array-dot { width: 24px; height: 24px; font-size: 1.05rem; }
+  .bingo__cell { font-size: 1.6rem; }
+}

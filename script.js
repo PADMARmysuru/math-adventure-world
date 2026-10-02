@@ -48,8 +48,8 @@ const LOCATIONS = [
     milo: 'Number Island! Numbers are hiding everywhere here.',
     modules: [
       ready('Counting', '🔢', { id: 'counting', url: 'number-island/counting.html', steps: 6 }), ready('Place Value', '🧱', { id: 'place-value', url: 'number-island/place-value.html', steps: 6 }), ready('Comparing Numbers', '⚖️', { id: 'comparing-numbers', url: 'number-island/comparing-numbers.html', steps: 6 }),
-      ready('Addition', '➕', { id: 'addition', url: 'number-island/addition.html', steps: 6 }), soon('Subtraction', '➖'), soon('Multiplication', '✖️'),
-      soon('Division', '➗'), soon('Fractions', '🍕'), soon('Number Patterns', '🔁')
+      ready('Addition', '➕', { id: 'addition', url: 'number-island/addition.html', steps: 6 }), ready('Subtraction', '➖', { id: 'subtraction', url: 'number-island/subtraction.html', steps: 6 }), ready('Multiplication', '✖️', { id: 'multiplication', url: 'number-island/multiplication.html', steps: 6 }),
+      ready('Division', '➗', { id: 'division', url: 'number-island/division.html', steps: 6 }), ready('Fractions', '🍕', { id: 'fractions', url: 'number-island/fractions.html', steps: 6 }), ready('Number Patterns', '🔁', { id: 'number-patterns', url: 'number-island/number-patterns.html', steps: 6 })
     ]
   },
   {
@@ -134,7 +134,13 @@ const BADGES = [
   { id: 'counting-master', icon: '🔢', name: 'Counting Master', how: 'Master Counting on Number Island' },
   { id: 'place-value-pro', icon: '🧱', name: 'Place Value Pro', how: 'Master Place Value on Number Island' },
   { id: 'comparing-champ', icon: '⚖️', name: 'Comparing Champ', how: 'Master Comparing Numbers on Number Island' },
-  { id: 'addition-ace',    icon: '➕', name: 'Addition Ace',    how: 'Master Addition on Number Island' }
+  { id: 'addition-ace',    icon: '➕', name: 'Addition Ace',    how: 'Master Addition on Number Island' },
+  { id: 'subtraction-star', icon: '➖', name: 'Subtraction Star', how: 'Master Subtraction on Number Island' },
+  { id: 'multiplication-master', icon: '✖️', name: 'Multiplication Master', how: 'Master Multiplication on Number Island' },
+  { id: 'division-detective', icon: '➗', name: 'Division Detective', how: 'Master Division on Number Island' },
+  { id: 'fraction-hero',   icon: '🍕', name: 'Fraction Hero',   how: 'Master Fractions on Number Island' },
+  { id: 'pattern-pro',     icon: '🔁', name: 'Pattern Pro',     how: 'Master Number Patterns on Number Island' },
+  { id: 'number-island-hero', icon: '🏝️', name: 'Number Island Hero', how: 'Master every module on Number Island' }
 ];
 
 const MILO_LINES = {
@@ -342,6 +348,7 @@ function markModuleMastered(moduleId) {
   if (entry.mastered) return false;
   entry.mastered = true;
   saveState();
+  checkMilestones();
   updateProgress();
   return true;
 }
@@ -351,6 +358,11 @@ function checkMilestones() {
   if (state.stars >= 25) unlockBadge('star-collector');
   if (state.gems >= 5) unlockBadge('gem-finder');
   if (LOCATIONS.every(loc => state.visited.includes(loc.id))) unlockBadge('world-explorer');
+  const island = LOCATIONS.find(loc => loc.id === 'number-island');
+  const islandModules = island.modules.filter(m => m.url);
+  if (islandModules.length === island.modules.length && islandModules.every(m => getModuleProgress(`${island.id}/${m.id}`).mastered)) {
+    unlockBadge('number-island-hero');
+  }
 }
 
 /** Redraw every place that shows progress. Safe to call any time. */

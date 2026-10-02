@@ -330,6 +330,7 @@
         if (!slot || slot.disabled || !slots.contains(slot)) return;
         if (Number(tile.dataset.value) === Number(slot.dataset.value)) {
           slot.textContent = tile.dataset.value;
+          slot.classList.remove('is-bad');
           slot.classList.add('is-filled');
           slot.disabled = true;
           slot.setAttribute('aria-label', `${tile.dataset.value}, correct`);

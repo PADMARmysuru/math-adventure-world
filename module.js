@@ -64,7 +64,15 @@
 
   const button = (label, cls, onclick, extra = {}) => el('button', { type: 'button', class: cls, onclick, ...extra }, label);
   const instruction = text => el('p', { class: 'stage-instruction' }, text);
-  const pulse = (node, cls) => { node.classList.remove(cls); void node.offsetWidth; node.classList.add(cls); };
+  /** Replay a short effect class (shake, bounce, pop). It clears itself so no "wrong" colour is left behind. */
+  const pulse = (node, cls) => {
+    if (!node) return;
+    node.classList.remove(cls);
+    void node.offsetWidth;
+    node.classList.add(cls);
+    clearTimeout(node._pulseTimer);
+    node._pulseTimer = setTimeout(() => node.classList.remove(cls), 650);
+  };
 
   /** Three answer options (answer + 2 different, 0–100), shuffled, for MA.renderChallenge. */
   function optionsFor(answer, candidates) {
@@ -207,6 +215,119 @@
       if (suppressClick) { suppressClick = false; return; }
       onTap();
     });
+  }
+
+  /* ------------------------------------------------------------
+     Round helpers used by most activities
+     ------------------------------------------------------------ */
+
+  /** After a round: on the last round call done(), otherwise add a "Next" button. */
+  function nextOrDone(result, isLast, label, next, done, finalText) {
+    if (isLast) {
+      if (finalText) result.append(el('p', { class: 'round-result__text' }, finalText));
+      done();
+    } else {
+      result.append(el('div', { class: 'stage-actions' }, button(label, 'btn', next)));
+    }
+  }
+
+  /**
+   * Drag-to-match: cards with an answer box, plus a bank of tiles (one or more are tricks).
+   * items: [{ face: Node, value, label }]   tiles: values   onComplete(spareTile)
+   * Values may be numbers or strings. Works with drag, tap-tap and keyboard.
+   */
+  function dragMatch({ items, tiles, onComplete, hint = 'Almost! Try another box.', cardClass = '' }) {
+    let selected = null;
+    let filled = 0;
+    const cards = el('div', { class: `match-grid ${cardClass}` });
+    const slots = items.map(item => {
+      const slot = el('div', {
+        class: 'slot match-box', role: 'button', tabindex: '0',
+        'data-value': item.value, 'aria-label': `${item.label || 'Answer box'}, empty`
+      }, '?');
+      const activate = () => { if (selected) tryPlace(selected, slot); else say('Pick an answer first, then tap a box.'); };
+      slot.addEventListener('click', activate);
+      slot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+      cards.append(el('div', { class: 'match-item' }, item.face, slot));
+      return slot;
+    });
+    const bank = el('div', { class: 'tile-bank', role: 'group', 'aria-label': 'Answers' });
+    shuffle(tiles).forEach(v => {
+      const tile = button(String(v), `tile${String(v).length > 3 ? ' tile--wide' : ''}`, null, { 'data-value': v, 'aria-label': `Answer ${v}` });
+      makeDraggable(tile, {
+        onDrop: slot => tryPlace(tile, slot && slots.includes(slot) ? slot : null),
+        onTap: () => {
+          if (tile.disabled) return;
+          if (selected) selected.classList.remove('is-selected');
+          if (selected === tile) { selected = null; return; }
+          selected = tile;
+          tile.classList.add('is-selected');
+        }
+      });
+      bank.append(tile);
+    });
+
+    function tryPlace(tile, slot) {
+      if (selected) selected.classList.remove('is-selected');
+      selected = null;
+      if (!slot || slot.classList.contains('is-filled')) return;
+      if (String(tile.dataset.value) === String(slot.dataset.value)) {
+        slot.textContent = tile.dataset.value;
+        slot.classList.add('is-filled');
+        slot.setAttribute('aria-label', `${tile.dataset.value}, correct`);
+        tile.remove();
+        filled += 1;
+        if (filled === items.length) {
+          const spare = $('.tile', bank);
+          if (spare) { spare.classList.add('is-spare'); spare.disabled = true; }
+          onComplete(spare);
+        } else say(pick(PRAISE));
+      } else {
+        pulse(slot, 'is-bad');
+        pulse(tile, 'is-bounce');
+        say(typeof hint === 'function' ? hint(tile.dataset.value, slot.dataset.value) : hint);
+      }
+    }
+    return { cards, bank };
+  }
+
+  /** Simple SVG shapes split into equal (or unequal) parts; shaded = indexes to colour. */
+  function fractionSVG({ shape = 'circle', parts = 4, shaded = [], unequal = false, size = 120, interactive = false }) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('width', size);
+    svg.setAttribute('height', size);
+    svg.setAttribute('class', `frac-svg${interactive ? ' is-interactive' : ''}`);
+    const paths = [];
+    if (shape === 'circle') {
+      for (let i = 0; i < parts; i++) {
+        const a0 = (i / parts) * 2 * Math.PI - Math.PI / 2;
+        const a1 = ((i + 1) / parts) * 2 * Math.PI - Math.PI / 2;
+        const x0 = 50 + 46 * Math.cos(a0); const y0 = 50 + 46 * Math.sin(a0);
+        const x1 = 50 + 46 * Math.cos(a1); const y1 = 50 + 46 * Math.sin(a1);
+        const large = a1 - a0 > Math.PI ? 1 : 0;
+        paths.push(parts === 1 ? 'M50 4 A46 46 0 1 1 49.9 4 Z' : `M50 50 L${x0.toFixed(2)} ${y0.toFixed(2)} A46 46 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z`);
+      }
+    } else {
+      // rectangle bars; unequal: first part is bigger
+      const widths = [];
+      if (unequal && parts === 2) widths.push(64, 28);
+      else for (let i = 0; i < parts; i++) widths.push(92 / parts);
+      let x = 4;
+      const h = shape === 'square' ? 92 : 56;
+      const y = shape === 'square' ? 4 : 22;
+      widths.forEach(w => { paths.push(`M${x} ${y} h${w} v${h} h${-w} Z`); x += w; });
+    }
+    if (unequal && shape === 'circle') paths.splice(0, paths.length, 'M50 50 L50 4 A46 46 0 0 1 89.8 73 Z', 'M50 50 L89.8 73 A46 46 0 1 1 50 4 Z');
+    paths.forEach((d, i) => {
+      const path = document.createElementNS(ns, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', `frac-part${shaded.includes(i) ? ' is-shaded' : ''}`);
+      path.setAttribute('data-index', i);
+      svg.append(path);
+    });
+    return svg;
   }
 
   /* ------------------------------------------------------------
@@ -353,6 +474,7 @@
   window.ModuleKit = {
     MA, $, $$, rnd, pick, shuffle, wait, reducedMotion, say, PRAISE,
     el, button, instruction, pulse, optionsFor, track, choices, digitsHTML, blocksHTML, trueFalse,
+    nextOrDone, dragMatch, fractionSVG,
     makeDraggable, startModule, masterFinale, runMaster
   };
 })();

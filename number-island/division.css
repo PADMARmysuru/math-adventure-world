@@ -1,0 +1,6 @@
+/* ➗ Number Island → Division — styles unique to this module (shared: ../module.css) */
+.shore { background: #EAD9B8; }
+.lake { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; width: 100%; max-width: 600px; min-height: 90px; padding: .8rem; border-radius: 24px; background: #BDE7F7; }
+.boat { display: flex; flex-direction: column; align-items: center; padding: .3rem .5rem; border-radius: 14px; background: rgba(255, 255, 255, .7); animation: pop .35s ease; }
+.boat__load { font-size: 1.1rem; letter-spacing: -2px; }
+.boat__hull { font-weight: 900; }

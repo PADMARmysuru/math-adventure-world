@@ -55,19 +55,6 @@
   animation: pop .3s ease;
 }
 
-.pv-controls { display: flex; gap: .5rem; }
-.pv-btn {
-  min-width: 56px; min-height: 56px; padding: 0 .9rem;
-  border: 0; border-radius: 18px;
-  font-size: 1.15rem; font-weight: 900; cursor: pointer;
-  transition: transform .12s ease;
-}
-.pv-btn:active:not(:disabled) { transform: translateY(3px); }
-.pv-btn:disabled { opacity: .45; cursor: default; }
-.pv-btn--ten { background: var(--tens); color: #fff; box-shadow: 0 5px 0 #1E4FA3; }
-.pv-btn--one { background: #C9580B; color: #fff; box-shadow: 0 5px 0 #8F3E06; }
-.pv-btn--minus { background: #fff; color: var(--ink); border: 3px solid #D7D3EE; box-shadow: 0 5px 0 #D7D3EE; font-size: 1.5rem; }
-
 .pv-readout { margin: 0; font-size: clamp(1.1rem, 3vw, 1.45rem); font-weight: 900; }
 .pv-readout .d-tens, .pv-readout .d-ones { font-size: 1.3em; }
 .pv-value { padding: 0 .35em; border-radius: 10px; background: #FFF6D6; font-size: 1.3em; }
@@ -145,7 +132,6 @@
   .pv-rods { gap: 3px; min-height: 90px; }
   .pv-cubes { grid-template-columns: repeat(5, 14px); gap: 3px; min-height: 90px; }
   .cube-lg { width: 14px; height: 14px; }
-  .pv-btn { min-width: 48px; min-height: 52px; padding: 0 .6rem; font-size: 1rem; }
 
   .pv-slot { width: 92px; height: 92px; }
   .pv-card { width: 72px; height: 72px; font-size: 2rem; }

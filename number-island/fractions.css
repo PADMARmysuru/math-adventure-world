@@ -1,0 +1,32 @@
+/* 🍕 Number Island → Fractions — styles unique to this module (shared: ../module.css) */
+.frac-stage { display: flex; justify-content: center; padding: .6rem; }
+.frac-svg.is-interactive .frac-part:hover { fill: #FFE1C7; }
+.frac-svg.is-interactive .frac-part.is-shaded:hover { fill: #FF8A3D; }
+.frac-part:focus { outline: none; stroke: var(--purple); stroke-width: 4; }
+.tf-statement .frac-svg { margin: 0 auto .4rem; }
+
+/* Apples and basket */
+.apple { padding: 0; border: 0; background: none; font-size: 2rem; line-height: 1.1; cursor: pointer; }
+.apple:disabled { cursor: default; }
+.basket-label { margin: 0; font-weight: 900; }
+.basket {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 2px;
+  width: 100%; max-width: 420px; min-height: 64px; padding: .6rem;
+  border: 4px dashed #C99A66; border-radius: 0 0 40px 40px; background: #FFF3E0;
+}
+
+/* Build a whole */
+.whole-bar {
+  position: relative; display: flex; width: 100%; max-width: 600px; height: 72px;
+  border: 4px solid var(--ink); border-radius: 14px; background: #fff; overflow: hidden;
+}
+.whole-bar__target { position: absolute; inset: 0 auto 0 0; border-right: 4px dashed var(--purple); background: repeating-linear-gradient(45deg, #F3F1FF 0 10px, #fff 10px 20px); }
+.whole-bar__piece { position: relative; display: grid; place-items: center; height: 100%; border-right: 3px solid var(--ink); font-size: 1.5rem; font-weight: 900; animation: pop .3s ease; }
+.whole-bar__piece--half { background: #FF8A3D; }
+.whole-bar__piece--quarter { background: #FFC93C; }
+.whole-bar.is-bad { animation: shake .45s ease; }
+.piece-btn { min-width: 110px; min-height: 64px; border: 0; border-radius: 18px; font-size: 1.3rem; font-weight: 900; cursor: pointer; color: var(--ink); }
+.piece-btn--half { background: #FF8A3D; box-shadow: 0 5px 0 #C9580B; }
+.piece-btn--quarter { background: #FFC93C; box-shadow: 0 5px 0 var(--sun-dark); }
+.piece-btn:active:not(:disabled) { transform: translateY(3px); }
+.piece-btn:disabled { opacity: .5; cursor: default; }
