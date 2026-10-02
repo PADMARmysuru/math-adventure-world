@@ -1,0 +1,28 @@
+/* ⏰ Time Town — town.css (shared by the Time Town modules; general styles: ../module.css) */
+.clock-svg { display: block; }
+.clock-hand { transform-origin: 100px 100px; transition: transform .45s ease; }
+.clock-pair { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; font-weight: 900; }
+.clock-pair > span { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 110px; padding: .4rem; border-radius: 16px; background: #FFEBF0; }
+.digital { display: inline-block; padding: .2em .6em; border-radius: 12px; background: #2B2D42; color: #7CF29A; font-family: ui-monospace, monospace; font-size: 2.6rem; font-weight: 900; letter-spacing: .06em; }
+.calendar { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; width: 100%; max-width: 460px; padding: .6rem; border-radius: 18px; background: #FFEBF0; }
+.calendar__title { grid-column: 1 / -1; margin: 0 0 .3rem; text-align: center; font-weight: 900; font-size: 1.2rem; }
+.calendar__head { text-align: center; font-weight: 900; font-size: .8rem; color: var(--ink-soft); }
+.calendar__day { aspect-ratio: 1; border: 2px solid #F6C9D4; border-radius: 10px; background: #fff; font-weight: 900; font-size: 1rem; cursor: pointer; padding: 0; color: var(--ink); }
+.calendar__day.is-weekend { background: #FFF6D9; }
+.calendar__day.is-right { border-color: var(--correct); background: var(--correct-soft); }
+.calendar__day.is-oops { animation: shake .45s ease; border-color: var(--wrong); }
+.word-slots { flex-wrap: wrap !important; }
+.word-slots li { flex: 0 0 auto !important; }
+.word-slot { width: auto !important; min-width: 110px; height: 56px !important; aspect-ratio: auto !important; padding: 0 .6rem !important; font-size: 1rem !important; }
+.word-tile { font-size: 1.05rem; height: 56px; }
+.day-train { display: flex; justify-content: center; gap: .3rem; }
+.day-car { display: grid; place-items: center; min-width: 96px; height: 60px; padding: 0 .5rem; border-radius: 12px 12px 18px 18px; background: #FF6B8B; color: #fff; font-weight: 900; box-shadow: 0 5px 0 #D9466A; }
+.day-car:first-child { border-radius: 24px 12px 18px 18px; }
+.day-car.is-gap { background: #FFF6D9; color: var(--ink-soft); border: 3px dashed var(--sun-dark); box-shadow: none; font-size: 1.6rem; }
+.month-wheel { position: relative; width: 240px; height: 240px; border-radius: 50%; background: #FFEBF0; margin: 0 auto; }
+.month-wheel__m { --k: 0; position: absolute; left: 50%; top: 50%; width: 52px; margin: -14px 0 0 -26px; text-align: center; font-weight: 900; font-size: .85rem; transform: rotate(calc(var(--k) * 30deg)) translateY(-96px) rotate(calc(var(--k) * -30deg)); }
+.month-wheel__m.is-now { padding: .1em .2em; border-radius: 8px; background: #FF6B8B; color: #fff; }
+.timetable { border-collapse: collapse; font-weight: 800; }
+.timetable th, .timetable td { padding: .45rem .9rem; border: 2px solid #F6C9D4; }
+.timetable th { background: #FF6B8B; color: #fff; }
+@media (max-width: 680px) { .day-car { min-width: 82px; font-size: .9rem; } .word-slot { min-width: 92px; } .calendar__day { font-size: .85rem; } }

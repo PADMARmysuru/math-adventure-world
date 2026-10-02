@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#E2F7F4">
+  <title>Sorting — Data Park — Math Adventure World</title>
+  <meta name="description" content="Sort by rules, Venn diagrams, Carroll diagrams and secret rules.">
+  <link rel="icon" type="image/svg+xml" href="../icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="apple-mobile-web-app-title" content="Math World">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../module.css">
+  <link rel="stylesheet" href="park.css">
+</head>
+<body class="module-page">
+  <a class="skip-link" href="#stage-panel">Skip to the activity</a>
+
+  <!-- =========================================================
+       MILO SPRITE — drawn once, reused everywhere with <use href="#milo">
+       Original artwork (no copyrighted illustrations).
+       ========================================================= -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="milo" viewBox="0 0 200 200">
+      <!-- body + scarf -->
+      <path d="M44 200 C 50 162, 78 150, 100 150 C 122 150, 150 162, 156 200 Z" fill="#FF8A3D"/>
+      <ellipse cx="100" cy="188" rx="26" ry="22" fill="#FFF6EC"/>
+      <path d="M66 156 C 84 168, 116 168, 134 156 L 130 172 C 112 181, 88 181, 70 172 Z" fill="#22B5A6"/>
+      <!-- ears -->
+      <path d="M42 36 L 94 76 L 56 114 Z" fill="#FF8A3D"/>
+      <path d="M53 54 L 82 79 L 61 100 Z" fill="#FFD1B0"/>
+      <path d="M158 36 L 106 76 L 144 114 Z" fill="#FF8A3D"/>
+      <path d="M147 54 L 118 79 L 139 100 Z" fill="#FFD1B0"/>
+      <!-- head + face mask -->
+      <ellipse cx="100" cy="110" rx="64" ry="54" fill="#FF8A3D"/>
+      <path d="M100 110 C 88 122, 60 120, 44 128 C 50 154, 76 166, 100 166 C 124 166, 150 154, 156 128 C 140 120, 112 122, 100 110 Z" fill="#FFF6EC"/>
+      <!-- eyes -->
+      <ellipse cx="76" cy="106" rx="8" ry="10" fill="#2B2D42"/>
+      <ellipse cx="124" cy="106" rx="8" ry="10" fill="#2B2D42"/>
+      <circle cx="79" cy="102" r="3" fill="#fff"/>
+      <circle cx="127" cy="102" r="3" fill="#fff"/>
+      <!-- cheeks, nose, smile -->
+      <ellipse cx="60" cy="132" rx="9" ry="5" fill="#FF9FB2" opacity=".75"/>
+      <ellipse cx="140" cy="132" rx="9" ry="5" fill="#FF9FB2" opacity=".75"/>
+      <ellipse cx="100" cy="134" rx="9" ry="6.5" fill="#2B2D42"/>
+      <path d="M91 145 Q 100 153 109 145" stroke="#2B2D42" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <!-- explorer hat -->
+      <ellipse cx="100" cy="64" rx="60" ry="11" fill="#D9A35F"/>
+      <path d="M64 64 C 66 28, 134 28, 136 64 Z" fill="#EBBE74"/>
+      <path d="M66 52 C 80 57, 120 57, 134 52 L 135 61 C 120 66, 80 66, 65 61 Z" fill="#E85D75"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html#home" class="logo">
+        <span class="logo__icon" aria-hidden="true">🌈</span>
+        <span class="logo__text">Math <span>Adventure</span> World</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <ul>
+          <li><a href="../index.html#home" class="nav-link" data-nav="home"><span class="nav-link__icon" aria-hidden="true">🏠</span><span class="nav-link__text">Home</span></a></li>
+          <li><a href="../index.html#adventure" class="nav-link" data-nav="adventure" aria-current="true"><span class="nav-link__icon" aria-hidden="true">🗺️</span><span class="nav-link__text">Adventure</span></a></li>
+          <li><a href="../index.html#badges" class="nav-link" data-nav="badges"><span class="nav-link__icon" aria-hidden="true">🏆</span><span class="nav-link__text">Badges</span></a></li>
+          <li><a href="../index.html#progress" class="nav-link" data-nav="progress"><span class="nav-link__icon" aria-hidden="true">📊</span><span class="nav-link__text">Progress</span></a></li>
+          <li><a href="../index.html#grown-ups" class="nav-link" data-nav="grown-ups"><span class="nav-link__icon" aria-hidden="true">👨‍👩‍👧</span><span class="nav-link__text"><span class="nav-text-long">Parent/Teacher</span><span class="nav-text-short">Grown-ups</span></span></a></li>
+        </ul>
+      </nav>
+
+      <div class="stats" aria-label="My rewards">
+        <a href="../index.html#progress" class="stat stat--stars"><span class="stat__icon" aria-hidden="true">⭐</span><span class="stat__label">Stars:</span><strong data-count="stars">0</strong></a>
+        <a href="../index.html#progress" class="stat stat--gems"><span class="stat__icon" aria-hidden="true">💎</span><span class="stat__label">Gems:</span><strong data-count="gems">0</strong></a>
+        <a href="../index.html#badges" class="stat stat--badges"><span class="stat__icon" aria-hidden="true">🏆</span><span class="stat__label">Badges:</span><strong data-count="badges">0</strong></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Module banner -->
+    <section class="module-hero" style="--loc-color:#22B5A6; --loc-shade:#13877B; --loc-tint:#E2F7F4" aria-labelledby="module-title">
+      <div class="container module-hero__inner">
+        <a class="back-link" href="../index.html#adventure"><span aria-hidden="true">⬅️</span> Map</a>
+        <span class="module-badge" aria-hidden="true">🗂️</span>
+        <div>
+          <p class="crumb"><span aria-hidden="true">📊</span> Data Park</p>
+          <h1 class="module-title" id="module-title">Sorting</h1>
+        </div>
+        <div class="guide guide--module">
+          <svg class="milo milo--mini" aria-hidden="true"><use href="#milo"/></svg>
+          <p class="speech speech--left" data-milo-bubble="module">Let’s sort things out!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Six-step learning journey -->
+    <section class="module-body" aria-label="Sorting activities">
+      <div class="container">
+        <nav aria-label="Learning steps">
+          <ol class="stepper" id="stepper"></ol>
+        </nav>
+        <article class="stage-card" id="stage-panel" tabindex="-1">
+          <noscript><p>Please turn on JavaScript to play.</p></noscript>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>🌈 Math Adventure World</strong> — Explore • Play • Think • Discover</p>
+    <p class="site-footer__small">Topics organised around the Cambridge Primary Mathematics Stage 2 (0096) curriculum framework. Not an official Cambridge resource.</p>
+  </footer>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+  <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+  <script src="../script.js" defer></script>
+  <script src="../module.js" defer></script>
+  <script src="park.js" defer></script>
+  <script src="sorting.js" defer></script>
+</body>
+</html>

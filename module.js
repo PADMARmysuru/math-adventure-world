@@ -411,6 +411,64 @@
     }
   }
 
+  /**
+   * Make an exact total by tapping pieces (coins, notes, jugs…).
+   * pieces: values   render(value) → Node   fmt(total) → text   rule(chosen) → message or ''
+   */
+  function makeTotal({ target, pieces, render, fmt = v => String(v), rule, onWin, hint }) {
+    const chosen = [];
+    let solved = false;
+    const tray = el('div', { class: 'total-tray', 'aria-live': 'polite' });
+    const total = el('p', { class: 'add-sentence', 'aria-live': 'polite' });
+    const sum = () => chosen.reduce((a, b) => a + b, 0);
+    const draw = () => {
+      tray.innerHTML = '';
+      if (!chosen.length) tray.append(el('span', { class: 'total-tray__empty' }, 'Tap below to add'));
+      chosen.forEach(v => tray.append(render(v, true)));
+      total.textContent = chosen.length ? `${chosen.map(fmt).join(' + ')} = ${fmt(sum())}` : `${fmt(0)}`;
+    };
+    const pad = el('div', { class: 'total-pad', role: 'group', 'aria-label': 'Choose' });
+    pieces.forEach(v => pad.append(button(render(v, false), 'total-piece', () => {
+      if (solved) return;
+      if (sum() + v > target) { say(`That makes ${fmt(sum() + v)}. Too much! We need ${fmt(target)}.`); return; }
+      chosen.push(v);
+      draw();
+      if (sum() === target) {
+        const problem = rule ? rule([...chosen]) : '';
+        if (problem) { say(problem); return; }
+        solved = true;
+        $$('button', root).forEach(b => { b.disabled = true; });
+        onWin([...chosen]);
+      } else if (hint) say(hint(sum()));
+    }, { 'aria-label': `Add ${fmt(v)}`, 'data-piece': v })));
+    const tools = el('div', { class: 'stage-actions' },
+      button('↩ Undo', 'btn btn--ghost', () => { if (!solved) { chosen.pop(); draw(); } }),
+      button('🧹 Clear', 'btn btn--ghost', () => { if (!solved) { chosen.length = 0; draw(); } }));
+    const root = el('div', { class: 'total-maker', 'data-total-target': target }, tray, total, pad, tools);
+    draw();
+    return root;
+  }
+
+  /**
+   * A value you change with step buttons until it matches a target (clock hands, bars, thermometers…).
+   * steps: [{ d, label, aria }]   onChange(value)
+   */
+  function makeSetter({ value = 0, min = 0, max = 100, target, steps, onChange }) {
+    let v = value;
+    const root = el('div', { class: 'setter', 'data-target': target, 'data-value': v });
+    const row = el('div', { class: 'pv-controls' });
+    steps.forEach(st => row.append(button(st.label, `pv-btn ${st.d > 0 ? 'pv-btn--ten' : 'pv-btn--minus'}`, () => {
+      if (root.classList.contains('is-locked')) return;
+      const nv = Math.max(min, Math.min(max, v + st.d));
+      if (nv === v) return;
+      v = nv;
+      root.dataset.value = v;
+      onChange(v);
+    }, { 'aria-label': st.aria || st.label, 'data-step': st.d })));
+    root.append(row);
+    return { root, get value() { return v; }, lock() { root.classList.add('is-locked'); $$('button', root).forEach(b => { b.disabled = true; }); } };
+  }
+
   /** The modules before and after this one in the same place on the map. */
   function findNeighbours(moduleId) {
     for (const loc of MA.LOCATIONS || []) {
@@ -590,7 +648,7 @@
   window.ModuleKit = {
     MA, $, $$, rnd, pick, shuffle, wait, reducedMotion, say, PRAISE,
     el, button, instruction, pulse, optionsFor, track, choices, digitsHTML, blocksHTML, trueFalse,
-    nextOrDone, dragMatch, fractionSVG, sortZones, quizRounds,
+    nextOrDone, dragMatch, fractionSVG, sortZones, quizRounds, makeTotal, makeSetter,
     makeDraggable, startModule, masterFinale, runMaster
   };
 })();

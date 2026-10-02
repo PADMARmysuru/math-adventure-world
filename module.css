@@ -502,7 +502,7 @@ button.tf-cell:disabled { cursor: default; }
 
 
 /* ---------- Sign / rule buttons ---------- */
-.sign-pad { display: flex; justify-content: center; gap: .8rem; }
+.sign-pad { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; }
 .sign-btn {
   width: 84px; height: 76px; border: 0; border-radius: 22px;
   background: var(--purple); color: #fff; font-size: 2.6rem; font-weight: 900; cursor: pointer;
@@ -583,3 +583,13 @@ button.tf-cell:disabled { cursor: default; }
 
 /* ---------- Shared: "smallest … biggest" labels above ordering boxes ---------- */
 .order-ends { display: flex; justify-content: space-between; gap: 1rem; width: 100%; max-width: 560px; font-weight: 900; color: var(--ink-soft); }
+
+/* ---------- Shared: make an exact total ---------- */
+.total-maker { display: flex; flex-direction: column; align-items: center; gap: .7rem; width: 100%; }
+.total-tray { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .3rem; width: 100%; max-width: 560px; min-height: 76px; padding: .6rem; border: 4px dashed #C9E4F4; border-radius: 22px; background: #F4FAFF; }
+.total-tray__empty { color: var(--ink-soft); font-weight: 800; }
+.total-pad { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.total-piece { padding: .3rem; border: 3px solid #DCD9EE; border-radius: 18px; background: #fff; cursor: pointer; box-shadow: 0 4px 0 #DCD9EE; }
+.total-piece:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+.total-piece:disabled { opacity: .55; cursor: default; }
+.setter { display: flex; flex-direction: column; align-items: center; gap: .5rem; }

@@ -1,0 +1,50 @@
+/* 📊 Data Park — park.css (shared by the Data Park modules; general styles: ../module.css) */
+.tally { display: inline-flex; flex-wrap: wrap; gap: .5rem; align-items: center; vertical-align: middle; }
+.tally__gate, .tally__rest { position: relative; display: inline-flex; gap: 5px; height: 30px; }
+.tally i { display: block; width: 4px; height: 30px; border-radius: 2px; background: #2B2D42; }
+.tally__gate b { position: absolute; left: -5px; right: -5px; top: 12px; height: 4px; border-radius: 2px; background: #E04F4F; transform: rotate(-25deg); }
+.data-table { border-collapse: collapse; font-weight: 800; background: #fff; }
+.data-table th, .data-table td { padding: .45rem .8rem; border: 2px solid #BFE8E1; text-align: left; }
+.data-table th { background: #22B5A6; color: #fff; }
+.tally-board { display: grid; gap: .4rem; width: 100%; max-width: 460px; }
+.tally-board__row { display: grid; grid-template-columns: 9rem 1fr auto; align-items: center; gap: .6rem; padding: .5rem .7rem; border: 3px solid #BFE8E1; border-radius: 16px; background: #fff; font-weight: 800; text-align: left; }
+.tally-board__row--btn { cursor: pointer; width: 100%; grid-template-columns: 9rem 1fr; }
+.tally-board__row--btn.is-oops { animation: shake .45s ease; border-color: var(--wrong); }
+.tally-field { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; padding: .8rem; border-radius: 20px; background: #E2F7F4; max-width: 520px; }
+.tally-item { width: 52px; height: 52px; border: 3px solid #fff; border-radius: 14px; background: #fff; font-size: 1.8rem; cursor: pointer; }
+.tally-item.is-counted { opacity: .3; }
+.parade { display: flex; flex-direction: column; align-items: center; min-height: 110px; padding: .6rem 1.4rem; border-radius: 20px; background: #E2F7F4; font-weight: 800; }
+.parade__pet { font-size: 4rem; animation: pop .3s ease; }
+.picto { display: grid; gap: .4rem; padding: .7rem; border-radius: 18px; background: #E2F7F4; }
+.picto__row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .3rem .5rem; border-radius: 12px; background: #fff; }
+.picto__label { min-width: 6rem; font-weight: 900; text-align: left; }
+.picto__pics { display: flex; flex-wrap: wrap; gap: 2px; font-size: 1.5rem; min-height: 1.6rem; }
+.picto__half { clip-path: inset(0 50% 0 0); }
+.picto__key { margin: .2rem 0 0; font-weight: 900; color: var(--ink-soft); }
+.picto--build .picto__row { justify-content: space-between; }
+.bg { --max: 8; display: flex; align-items: flex-start; gap: 0; padding: .7rem; border-radius: 18px; background: #E2F7F4; }
+.bg__axis { display: flex; flex-direction: column; justify-content: flex-start; padding-top: 2px; font-weight: 900; font-size: .8rem; border-right: 3px solid #2B2D42; padding-right: .3rem; }
+.bg__axis span { height: 24px; line-height: 24px; }
+.bg__cols { display: flex; gap: .7rem; align-items: flex-start; padding: 0 .4rem; }
+.bg__col { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+.bg__stack { display: flex; flex-direction: column-reverse; gap: 0; height: calc(var(--max) * 24px); justify-content: flex-start; border-bottom: 3px solid #2B2D42; margin: 0 -.35rem; padding: 0 .35rem; min-width: 40px; }
+.bg__block { display: block; width: 40px; height: 22px; margin-top: 2px; border-radius: 4px; background: #22B5A6; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .15); }
+.bg__label { display: flex; flex-direction: column; align-items: center; font-size: 1.4rem; }
+.bg__label small { font-size: .72rem; font-weight: 800; }
+.bg--build .setter .pv-btn { min-width: 40px; min-height: 40px; font-size: .95rem; padding: 0 .4rem; }
+.venn { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.carroll { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rule-groups { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.rule-group { display: flex; flex-direction: column; gap: .3rem; padding: .7rem; border-radius: 16px; background: #E2F7F4; font-size: 1.3rem; }
+.rule-group:last-child { background: #FFEDED; }
+.spinner { --turn: 0deg; position: relative; width: 170px; height: 170px; border-radius: 50%; border: 5px solid #2B2D42; background: conic-gradient(#E04F4F 0 25%, #E04F4F 25% 50%, #4D96FF 50% 75%, #FFC93C 75% 100%); }
+.spinner__arrow { position: absolute; left: 50%; top: 50%; font-size: 2.4rem; transform: translate(-50%, -60%) rotate(0deg); transform-origin: 50% 60%; }
+.spinner.is-spinning .spinner__arrow { animation: spin-arrow .7s ease-out forwards; }
+@keyframes spin-arrow { to { transform: translate(-50%, -60%) rotate(var(--turn)); } }
+.spin-graph { display: grid; gap: .3rem; width: 100%; max-width: 360px; }
+.spin-graph__row { display: grid; grid-template-columns: 2rem 1fr 2rem; align-items: center; gap: .5rem; font-weight: 900; }
+.spin-graph__bar { --n: 0; display: block; height: 18px; width: calc(var(--n) * 10%); border-radius: 999px; background: #22B5A6; transition: width .3s ease; }
+.chance-card { display: flex; flex-direction: column; align-items: center; gap: .2rem; font-size: 1.6rem; }
+.chance-card small { font-size: .62rem; font-weight: 800; line-height: 1.15; }
+.sort-card:has(.chance-card) { width: 120px; height: auto; min-height: 92px; }
+@media (max-width: 680px) { .tally-board__row { grid-template-columns: 6.5rem 1fr auto; } .bg__block { width: 30px; } .bg__cols { gap: .4rem; } }

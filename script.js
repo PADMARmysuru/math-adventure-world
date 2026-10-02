@@ -93,7 +93,7 @@ const LOCATIONS = [
     tip: 'Coins, notes and shopping',
     milo: 'Money Market! Let\'s count coins and go shopping.',
     modules: [
-      soon('Coins', '🪙'), soon('Notes', '💵'), soon('Counting Money', '🧮'), soon('Shopping Games', '🛒')
+      ready('Coins', '🪙', { id: 'coins', url: 'money-market/coins.html', steps: 6 }), ready('Notes', '💵', { id: 'notes', url: 'money-market/notes.html', steps: 6 }), ready('Counting Money', '🧮', { id: 'counting-money', url: 'money-market/counting-money.html', steps: 6 }), ready('Shopping Games', '🛒', { id: 'shopping-games', url: 'money-market/shopping-games.html', steps: 6 })
     ]
   },
   {
@@ -102,8 +102,8 @@ const LOCATIONS = [
     tip: 'Clocks, days and months',
     milo: 'Time Town! Tick tock. What time is it?',
     modules: [
-      soon('Clock', '🕒'), soon('Calendar', '📅'), soon('Days', '🌞'),
-      soon('Months', '🗓️'), soon('Time Problems', '⏳')
+      ready('Clock', '🕒', { id: 'clock', url: 'time-town/clock.html', steps: 6 }), ready('Calendar', '📅', { id: 'calendar', url: 'time-town/calendar.html', steps: 6 }), ready('Days', '🌞', { id: 'days', url: 'time-town/days.html', steps: 6 }),
+      ready('Months', '🗓️', { id: 'months', url: 'time-town/months.html', steps: 6 }), ready('Time Problems', '⏳', { id: 'time-problems', url: 'time-town/time-problems.html', steps: 6 })
     ]
   },
   {
@@ -112,8 +112,8 @@ const LOCATIONS = [
     tip: 'Sort, count and make charts',
     milo: 'Data Park! Let\'s sort things and make charts.',
     modules: [
-      soon('Tally Charts', '✏️'), soon('Pictograms', '🖼️'), soon('Block Graphs', '📊'),
-      soon('Sorting', '🗂️'), soon('Data Questions', '❓')
+      ready('Tally Charts', '✏️', { id: 'tally-charts', url: 'data-park/tally-charts.html', steps: 6 }), ready('Pictograms', '🖼️', { id: 'pictograms', url: 'data-park/pictograms.html', steps: 6 }), ready('Block Graphs', '📊', { id: 'block-graphs', url: 'data-park/block-graphs.html', steps: 6 }),
+      ready('Sorting', '🗂️', { id: 'sorting', url: 'data-park/sorting.html', steps: 6 }), ready('Data Questions', '❓', { id: 'data-questions', url: 'data-park/data-questions.html', steps: 6 })
     ]
   },
   {
@@ -123,8 +123,8 @@ const LOCATIONS = [
     milo: 'Challenge Arena! Today\'s challenge is waiting for you.',
     modules: [
       ready('Daily Challenge', '🎯', { action: 'daily' }),
-      soon('Mixed Challenges', '🎲'), soon('Timed Games', '⏱️'),
-      soon('Puzzle Challenges', '🧩'), soon('Boss Challenges', '🐉')
+      ready('Mixed Challenges', '🎲', { id: 'mixed-challenges', url: 'challenge-arena/mixed-challenges.html', steps: 6 }), ready('Timed Games', '⏱️', { id: 'timed-games', url: 'challenge-arena/timed-games.html', steps: 6 }),
+      ready('Puzzle Challenges', '🧩', { id: 'puzzle-challenges', url: 'challenge-arena/puzzle-challenges.html', steps: 6 }), ready('Boss Challenges', '🐉', { id: 'boss-challenges', url: 'challenge-arena/boss-challenges.html', steps: 6 })
     ]
   }
 ];
@@ -161,7 +161,30 @@ const BADGES = [
   { id: 'capacity-captain', icon: '🥛', name: 'Capacity Captain', how: 'Master Capacity on Measure Mountain' },
   { id: 'temperature-tracker', icon: '🌡️', name: 'Temperature Tracker', how: 'Master Temperature on Measure Mountain' },
   { id: 'time-keeper',     icon: '⏱️', name: 'Time Keeper',     how: 'Master Time on Measure Mountain' },
-  { id: 'measure-mountain-hero', icon: '🏔️', name: 'Measure Mountain Hero', how: 'Master every module on Measure Mountain' }
+  { id: 'measure-mountain-hero', icon: '🏔️', name: 'Measure Mountain Hero', how: 'Master every module on Measure Mountain' },
+  { id: 'coin-collector', icon: '🪙', name: 'Coin Collector', how: 'Master Coins in Money Market' },
+  { id: 'note-ninja', icon: '💵', name: 'Note Ninja', how: 'Master Notes in Money Market' },
+  { id: 'money-counter', icon: '🧮', name: 'Money Counter', how: 'Master Counting Money in Money Market' },
+  { id: 'super-shopper', icon: '🛒', name: 'Super Shopper', how: 'Master Shopping Games in Money Market' },
+  { id: 'money-market-hero', icon: '💰', name: 'Money Market Hero', how: 'Master every module in Money Market' },
+  { id: 'clock-champion', icon: '🕒', name: 'Clock Champion', how: 'Master Clock in Time Town' },
+  { id: 'calendar-captain', icon: '📅', name: 'Calendar Captain', how: 'Master Calendar in Time Town' },
+  { id: 'day-detective', icon: '🌞', name: 'Day Detective', how: 'Master Days in Time Town' },
+  { id: 'month-master', icon: '🗓️', name: 'Month Master', how: 'Master Months in Time Town' },
+  { id: 'time-solver', icon: '⏳', name: 'Time Solver', how: 'Master Time Problems in Time Town' },
+  { id: 'time-town-hero', icon: '⏰', name: 'Time Town Hero', how: 'Master every module in Time Town' },
+  { id: 'tally-tracker', icon: '✏️', name: 'Tally Tracker', how: 'Master Tally Charts in Data Park' },
+  { id: 'picture-pro', icon: '🖼️', name: 'Picture Pro', how: 'Master Pictograms in Data Park' },
+  { id: 'graph-genius', icon: '📊', name: 'Graph Genius', how: 'Master Block Graphs in Data Park' },
+  { id: 'sorting-star', icon: '🗂️', name: 'Sorting Star', how: 'Master Sorting in Data Park' },
+  { id: 'data-detective', icon: '❓', name: 'Data Detective', how: 'Master Data Questions in Data Park' },
+  { id: 'data-park-hero', icon: '📊', name: 'Data Park Hero', how: 'Master every module in Data Park' },
+  { id: 'arena-champion', icon: '🎲', name: 'Arena Champion', how: 'Master Mixed Challenges in Challenge Arena' },
+  { id: 'speed-star', icon: '⏱️', name: 'Speed Star', how: 'Master Timed Games in Challenge Arena' },
+  { id: 'puzzle-master', icon: '🧩', name: 'Puzzle Master', how: 'Master Puzzle Challenges in Challenge Arena' },
+  { id: 'boss-beater', icon: '🐉', name: 'Boss Beater', how: 'Master Boss Challenges in Challenge Arena' },
+  { id: 'challenge-arena-hero', icon: '🎯', name: 'Challenge Arena Hero', how: 'Master every module in Challenge Arena' },
+  { id: 'grand-explorer', icon: '🌈', name: 'Grand Explorer', how: 'Become the hero of every place on the map' }
 ];
 
 const MILO_LINES = {
@@ -244,7 +267,8 @@ function createDefaultState() {
     visited: [],
     daily: { date: null, solved: false },
     solvedCount: 0,
-    modules: {}   // e.g. { 'number-island/counting': { stages: ['learn'], mastered: false } }
+    modules: {},  // e.g. { 'number-island/counting': { stages: ['learn'], mastered: false } }
+    playerName: ''
   };
 }
 
@@ -262,7 +286,8 @@ function loadState() {
       visited: Array.isArray(saved.visited) ? saved.visited.filter(id => LOCATIONS.some(l => l.id === id)) : [],
       daily: { ...fresh.daily, ...(saved.daily || {}) },
       solvedCount: Math.max(0, Number(saved.solvedCount) || 0),
-      modules: cleanModules(saved.modules)
+      modules: cleanModules(saved.modules),
+      playerName: typeof saved.playerName === 'string' ? saved.playerName.slice(0, 30) : ''
     };
   } catch (error) {
     return fresh; // storage blocked or corrupted: start fresh
@@ -332,6 +357,7 @@ function unlockBadge(id, { silent = false } = {}) {
   saveState();
   if (!silent) {
     showToast(`New badge: ${badge.name}!`, badge.icon);
+    if (id.endsWith('-hero') || id === 'grand-explorer') showToast('A certificate is ready to print! Open 🎓 Certificates.', '🎓');
     launchConfetti(70);
   }
   updateProgress();
@@ -374,6 +400,21 @@ function markModuleMastered(moduleId) {
   return true;
 }
 
+/** The child's name for certificates (max 30 characters). */
+function setPlayerName(name) {
+  state.playerName = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+  saveState();
+  return state.playerName;
+}
+const getPlayerName = () => state.playerName;
+
+/** How many modules in a place are mastered, e.g. { done: 3, total: 5 }. The Daily Challenge does not count. */
+function placeProgress(loc) {
+  const built = loc.modules.filter(m => m.url);
+  const done = built.filter(m => getModuleProgress(m.progressId || `${loc.id}/${m.id}`).mastered).length;
+  return { done, total: built.length, complete: built.length > 0 && done === built.length };
+}
+
 /** Badges earned by reaching totals. */
 function checkMilestones() {
   if (state.stars >= 25) unlockBadge('star-collector');
@@ -382,10 +423,12 @@ function checkMilestones() {
   // Place heroes: when every module in a place is built and mastered, award "<place-id>-hero"
   LOCATIONS.forEach(loc => {
     const built = loc.modules.filter(m => m.url);
-    if (built.length && built.length === loc.modules.length && built.every(m => getModuleProgress(m.progressId || `${loc.id}/${m.id}`).mastered)) {
+    const needed = loc.modules.filter(m => !m.action);   // the Daily Challenge is not a module to master
+    if (built.length && built.length === needed.length && built.every(m => getModuleProgress(m.progressId || `${loc.id}/${m.id}`).mastered)) {
       unlockBadge(`${loc.id}-hero`);
     }
   });
+  if (LOCATIONS.every(loc => hasBadge(`${loc.id}-hero`))) unlockBadge('grand-explorer');
 }
 
 /** Redraw every place that shows progress. Safe to call any time. */
@@ -1147,6 +1190,10 @@ window.MathAdventure = {
   LOCATIONS,
   BADGES,
   getModuleProgress,
+  setPlayerName,
+  SITE_CREDIT,
+  getPlayerName,
+  placeProgress,
   completeStage,
   isStageDone,
   markModuleMastered,

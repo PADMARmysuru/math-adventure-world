@@ -615,6 +615,9 @@ a.module-chip:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--sun
 .badge-card.is-unlocked { border-color: var(--sun); box-shadow: 0 8px 0 var(--sun-dark); }
 .badge-card.is-unlocked .badge-card__state { background: var(--correct-soft); color: #1D6E3B; }
 
+.cert-link { display: flex; flex-direction: column; align-items: center; gap: .5rem; margin-top: 1.6rem; text-align: center; font-weight: 800; color: var(--ink-soft); }
+.cert-link p { margin: 0; }
+
 /* ---------- 11. Progress ---------- */
 .progress-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
 .p-card {
