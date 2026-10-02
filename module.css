@@ -522,3 +522,36 @@ button.tf-cell:disabled { cursor: default; }
   .sign-btn { width: 72px; height: 66px; font-size: 2.2rem; }
   .plate { width: 132px; min-height: 118px; }
 }
+
+/* ---------- Shared: sort into groups ---------- */
+.sort-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; width: 100%; max-width: 640px; }
+.sort-zone {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  min-height: 160px; padding: .8rem .5rem; border: 4px dashed #B9B0F0; border-radius: 24px; background: #F6F4FF; cursor: pointer;
+}
+.sort-zone:nth-child(2) { border-color: #FFC59A; background: #FFF5EC; }
+.sort-zone.is-over { border-style: solid; transform: scale(1.02); }
+.sort-zone.is-bad { animation: shake .45s ease; border-color: var(--wrong); }
+.sort-zone__label { margin: 0; font-weight: 900; font-size: 1.15rem; text-align: center; }
+.sort-zone__items { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; }
+.sort-card { display: grid; place-items: center; width: 84px; height: 84px; padding: 4px; background: #fff; box-shadow: 0 5px 0 #DCD9EE; border: 3px solid #DCD9EE; font-size: 2rem; }
+.sort-card svg { width: 100%; height: 100%; pointer-events: none; }
+.sort-card.is-placed { width: 64px; height: 64px; box-shadow: none; pointer-events: none; font-size: 1.6rem; }
+@media (max-width: 680px) { .sort-card { width: 72px; height: 72px; } .sort-card.is-placed { width: 54px; height: 54px; } }
+
+/* ---------- Shared: up/down spinners ---------- */
+.spinners { display: flex; justify-content: center; gap: 1.2rem; }
+.spin {
+  display: flex; flex-direction: column; align-items: center; gap: .3rem;
+  padding: .7rem 1rem; border-radius: 22px;
+}
+.spin__label { margin: 0; font-weight: 900; }
+.spin__btn {
+  width: 64px; height: 52px; border: 0; border-radius: 16px;
+  background: #fff; font-size: 1.4rem; font-weight: 900; cursor: pointer;
+  box-shadow: 0 4px 0 rgba(43, 45, 66, .15);
+}
+.spin__btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+.spin__btn:disabled { opacity: .5; cursor: default; }
+.spin__val { font-size: 3rem; font-weight: 900; line-height: 1.1; min-width: 1.2ch; text-align: center; }
+.spin--face { background: #F3F1FF; border: 4px solid #DCD6FF; }

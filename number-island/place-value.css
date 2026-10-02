@@ -107,22 +107,8 @@
 }
 .riddle__icon { font-size: 2.4rem; }
 .riddle__text { margin: 0; font-size: clamp(1.15rem, 3vw, 1.4rem); font-weight: 900; }
-.spinners { display: flex; justify-content: center; gap: 1.2rem; }
-.spin {
-  display: flex; flex-direction: column; align-items: center; gap: .3rem;
-  padding: .7rem 1rem; border-radius: 22px;
-}
 .spin--tens { background: var(--tens-soft); border: 4px solid #B9D2F7; }
 .spin--ones { background: var(--ones-soft); border: 4px solid #FFC59A; }
-.spin__label { margin: 0; font-weight: 900; }
-.spin__btn {
-  width: 64px; height: 52px; border: 0; border-radius: 16px;
-  background: #fff; font-size: 1.4rem; font-weight: 900; cursor: pointer;
-  box-shadow: 0 4px 0 rgba(43, 45, 66, .15);
-}
-.spin__btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
-.spin__btn:disabled { opacity: .5; cursor: default; }
-.spin__val { font-size: 3rem; font-weight: 900; line-height: 1.1; min-width: 1.2ch; text-align: center; }
 
 /* ---------- Mobile ---------- */
 @media (max-width: 680px) {

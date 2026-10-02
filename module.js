@@ -291,6 +291,60 @@
     return { cards, bank };
   }
 
+  /**
+   * Sort items into labelled groups (drag or tap-tap).
+   * zones: [{ id, label }]   items: [{ face: Node|string, cat, label }]   onComplete()
+   * hint(item, zoneId) → text for a wrong drop
+   */
+  function sortZones({ zones, items, onComplete, hint }) {
+    let selected = null;
+    let sorted = 0;
+    const zoneEls = zones.map(z => {
+      const zone = el('div', { class: 'slot sort-zone', role: 'button', tabindex: '0', 'data-cat': z.id, 'aria-label': `${z.label} group` },
+        el('p', { class: 'sort-zone__label' }, z.label), el('div', { class: 'sort-zone__items' }));
+      const activate = () => { if (selected) place(selected, zone); else say('Pick something first, then tap a group.'); };
+      zone.addEventListener('click', activate);
+      zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+      return zone;
+    });
+    const bank = el('div', { class: 'tile-bank sort-bank', role: 'group', 'aria-label': 'Things to sort' });
+    shuffle(items).forEach(item => {
+      const card = button(typeof item.face === 'string' ? item.face : '', 'tile sort-card', null, { 'data-cat': item.cat, 'aria-label': item.label });
+      if (typeof item.face !== 'string') card.append(item.face);
+      card._item = item;
+      makeDraggable(card, {
+        onDrop: zone => place(card, zone && zoneEls.includes(zone) ? zone : null),
+        onTap: () => {
+          if (card.disabled) return;
+          if (selected) selected.classList.remove('is-selected');
+          if (selected === card) { selected = null; return; }
+          selected = card;
+          card.classList.add('is-selected');
+        }
+      });
+      bank.append(card);
+    });
+
+    function place(card, zone) {
+      if (selected) selected.classList.remove('is-selected');
+      selected = null;
+      if (!zone || card.disabled) return;
+      if (card.dataset.cat === zone.dataset.cat) {
+        card.disabled = true;
+        card.classList.add('is-placed');
+        $('.sort-zone__items', zone).append(card);
+        sorted += 1;
+        if (sorted === items.length) onComplete();
+        else say(pick(PRAISE));
+      } else {
+        pulse(card, 'is-bounce');
+        pulse(zone, 'is-bad');
+        say(hint ? hint(card._item, zone.dataset.cat) : 'Almost! Look again.');
+      }
+    }
+    return { bank, zones: el('div', { class: 'sort-zones' }, zoneEls) };
+  }
+
   /** Simple SVG shapes split into equal (or unequal) parts; shaded = indexes to colour. */
   function fractionSVG({ shape = 'circle', parts = 4, shaded = [], unequal = false, size = 120, interactive = false }) {
     const ns = 'http://www.w3.org/2000/svg';
@@ -474,7 +528,7 @@
   window.ModuleKit = {
     MA, $, $$, rnd, pick, shuffle, wait, reducedMotion, say, PRAISE,
     el, button, instruction, pulse, optionsFor, track, choices, digitsHTML, blocksHTML, trueFalse,
-    nextOrDone, dragMatch, fractionSVG,
+    nextOrDone, dragMatch, fractionSVG, sortZones,
     makeDraggable, startModule, masterFinale, runMaster
   };
 })();

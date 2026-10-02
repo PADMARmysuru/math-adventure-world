@@ -68,8 +68,8 @@ const LOCATIONS = [
     tip: 'Explore flat and solid shapes',
     milo: 'Shape Castle! Can you spot circles, squares and cubes?',
     modules: [
-      soon('2D Shapes', '🔺'), soon('3D Shapes', '🧊'), soon('Shape Properties', '📐'),
-      soon('Symmetry', '🦋'), soon('Position & Direction', '🧭')
+      ready('2D Shapes', '🔺', { id: '2d-shapes', url: 'shape-castle/2d-shapes.html', steps: 6 }), ready('3D Shapes', '🧊', { id: '3d-shapes', url: 'shape-castle/3d-shapes.html', steps: 6 }), ready('Shape Properties', '📐', { id: 'shape-properties', url: 'shape-castle/shape-properties.html', steps: 6 }),
+      ready('Symmetry', '🦋', { id: 'symmetry', url: 'shape-castle/symmetry.html', steps: 6 }), ready('Position & Direction', '🧭', { id: 'position-direction', url: 'shape-castle/position-direction.html', steps: 6 })
     ]
   },
   {
@@ -140,7 +140,13 @@ const BADGES = [
   { id: 'division-detective', icon: '➗', name: 'Division Detective', how: 'Master Division on Number Island' },
   { id: 'fraction-hero',   icon: '🍕', name: 'Fraction Hero',   how: 'Master Fractions on Number Island' },
   { id: 'pattern-pro',     icon: '🔁', name: 'Pattern Pro',     how: 'Master Number Patterns on Number Island' },
-  { id: 'number-island-hero', icon: '🏝️', name: 'Number Island Hero', how: 'Master every module on Number Island' }
+  { id: 'number-island-hero', icon: '🏝️', name: 'Number Island Hero', how: 'Master every module on Number Island' },
+  { id: 'shape-spotter',   icon: '🔺', name: 'Shape Spotter',   how: 'Master 2D Shapes in Shape Castle' },
+  { id: 'solid-shape-expert', icon: '🧊', name: '3D Shape Expert', how: 'Master 3D Shapes in Shape Castle' },
+  { id: 'property-pro',    icon: '📐', name: 'Property Pro',    how: 'Master Shape Properties in Shape Castle' },
+  { id: 'symmetry-star',   icon: '🦋', name: 'Symmetry Star',   how: 'Master Symmetry in Shape Castle' },
+  { id: 'super-navigator', icon: '🧭', name: 'Super Navigator', how: 'Master Position & Direction in Shape Castle' },
+  { id: 'shape-castle-hero', icon: '🏰', name: 'Shape Castle Hero', how: 'Master every module in Shape Castle' }
 ];
 
 const MILO_LINES = {
@@ -358,11 +364,13 @@ function checkMilestones() {
   if (state.stars >= 25) unlockBadge('star-collector');
   if (state.gems >= 5) unlockBadge('gem-finder');
   if (LOCATIONS.every(loc => state.visited.includes(loc.id))) unlockBadge('world-explorer');
-  const island = LOCATIONS.find(loc => loc.id === 'number-island');
-  const islandModules = island.modules.filter(m => m.url);
-  if (islandModules.length === island.modules.length && islandModules.every(m => getModuleProgress(`${island.id}/${m.id}`).mastered)) {
-    unlockBadge('number-island-hero');
-  }
+  // Place heroes: when every module in a place is built and mastered, award "<place-id>-hero"
+  LOCATIONS.forEach(loc => {
+    const built = loc.modules.filter(m => m.url);
+    if (built.length && built.length === loc.modules.length && built.every(m => getModuleProgress(`${loc.id}/${m.id}`).mastered)) {
+      unlockBadge(`${loc.id}-hero`);
+    }
+  });
 }
 
 /** Redraw every place that shows progress. Safe to call any time. */
@@ -867,7 +875,7 @@ function renderChallenge(container, challenge, { onCorrect } = {}) {
   challenge.options.forEach(option => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'answer-btn';
+    button.className = String(option.label).length > 3 ? 'answer-btn answer-btn--text' : 'answer-btn';   // words get a smaller font
     button.setAttribute('aria-label', option.label);
     button.innerHTML = `
       <span class="answer-btn__label">${option.html ?? option.label}</span>

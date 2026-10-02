@@ -1,0 +1,162 @@
+/* ==============================================================
+   🏰 Shape Castle — castle.css
+   Styles shared by every Shape Castle module.
+   General module styles come from ../module.css.
+   ============================================================== */
+
+/* ---------- Shape cards (flip to reveal) ---------- */
+.shape-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; width: 100%; max-width: 640px; }
+.shape-cards--3d { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.shape-cards--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.shape-card {
+  position: relative; display: grid; place-items: center;
+  min-height: 112px; padding: .5rem; border: 4px solid #DCD6FF; border-radius: 22px;
+  background: #fff; cursor: pointer; box-shadow: 0 6px 0 #DCD6FF;
+  transition: transform .15s ease;
+}
+.shape-card:active:not(:disabled) { transform: translateY(4px); }
+.shape-card:disabled { cursor: default; }
+.shape-card svg { pointer-events: none; max-width: 100%; height: auto; }
+.shape-card--small { min-height: 92px; }
+.shape-card__back {
+  position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: .15rem;
+  padding: .3rem; border-radius: 18px; background: var(--purple); color: #fff; text-align: center;
+}
+.shape-card__back strong { font-size: 1.1rem; }
+.shape-card__back small { font-size: .78rem; font-weight: 700; line-height: 1.2; }
+.shape-card__objects { font-size: 1.5rem; }
+.shape-card.is-flipped .shape-card__back { display: flex; animation: pop .3s ease; }
+.shape-card.is-right { border-color: var(--correct); background: var(--correct-soft); box-shadow: 0 6px 0 var(--correct); }
+.shape-card.is-right::after { content: "✓"; position: absolute; top: 6px; right: 10px; font-weight: 900; color: var(--correct); }
+.shape-card.is-wrong { border-style: dashed; border-color: var(--wrong); background: var(--wrong-soft); box-shadow: none; opacity: .65; }
+.shape-card.is-oops { animation: shake .45s ease; }
+
+.riddle-card {
+  display: flex; align-items: center; gap: .8rem; max-width: 560px;
+  padding: .9rem 1.2rem; border: 3px solid #DCD6FF; border-radius: 22px; background: #F3F1FF; text-align: left;
+}
+.riddle-card span { font-size: 2.2rem; }
+.riddle-card p { margin: 0; font-size: clamp(1.1rem, 3vw, 1.35rem); font-weight: 900; }
+.big-object { font-size: 4.5rem; line-height: 1; }
+.big-object--small { font-size: 2.6rem; }
+
+/* ---------- Shape hunt ---------- */
+.hunt {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .4rem;
+  width: 100%; max-width: 620px; padding: 1rem; border-radius: 28px;
+  background: linear-gradient(#DFF2FF, #DFF2FF 70%, #C9EBB0 70%);
+}
+.hunt__piece { padding: 4px; border: 3px solid transparent; border-radius: 16px; background: none; cursor: pointer; }
+.hunt__piece svg { pointer-events: none; display: block; }
+.hunt__piece.is-found { border-color: var(--correct); background: rgba(255, 255, 255, .8); }
+.hunt__piece.is-found::after { content: "✓"; display: block; font-weight: 900; color: var(--correct); }
+.hunt__piece.is-oops { animation: shake .45s ease; }
+
+/* ---------- Count sides and corners ---------- */
+.count-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem; }
+.count-panel { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+.count-svg { overflow: visible; }
+.count-side { stroke: #2B2D42; stroke-width: 5; stroke-linecap: round; cursor: pointer; }
+.count-side:hover { stroke: #7B61FF; }
+.count-side.is-counted { stroke: #FF8A3D; stroke-width: 7; }
+.count-corner { fill: #fff; stroke: #2B2D42; stroke-width: 2.5; opacity: 0; pointer-events: none; cursor: pointer; }
+.count-svg.show-corners .count-corner { opacity: 1; pointer-events: auto; }
+.count-corner.is-counted { fill: #7B61FF; stroke: #fff; }
+.count-side:focus, .count-corner:focus { outline: none; stroke: #7B61FF; }
+
+/* ---------- Geoboard ---------- */
+.geoboard { width: min(320px, 82vw); height: auto; border-radius: 20px; background: #FFF3E0; box-shadow: inset 0 0 0 4px #E3C9A0; }
+.geo-peg { fill: #8A5A2B; cursor: pointer; }
+.geo-peg:hover, .geo-peg:focus { fill: var(--purple); outline: none; }
+.geo-peg.is-used { fill: var(--purple); }
+.geo-band { fill: none; stroke: #FF6B8B; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.geo-shape { fill: rgba(255, 107, 139, .25); }
+.geoboard.is-right .geo-band { stroke: var(--correct); }
+.geoboard.is-right .geo-shape { fill: rgba(47, 154, 85, .25); }
+
+/* ---------- Symmetry ---------- */
+.fold-wrap { position: relative; width: 200px; height: 200px; }
+.fold-wrap > svg, .fold-half > svg { position: absolute; inset: 0; }
+.fold-half { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); transform-origin: 50% 50%; transition: transform 1s ease-in-out, opacity 1s ease; pointer-events: none; }
+.fold-wrap.is-folded .fold-half { transform: scaleX(-1); opacity: .75; }
+.fold-wrap.is-folded > svg { opacity: .55; }
+.mirror-line { stroke: #2B2D42; stroke-width: 2.5; stroke-dasharray: 5 4; }
+.pic-svg { display: block; }
+
+.mirror-grid { --cols: 8; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); width: 100%; max-width: 420px; border: 3px solid #2B2D42; background: #2B2D42; gap: 2px; }
+.mg-cell { aspect-ratio: 1; padding: 0; border: 0; background: #fff; cursor: pointer; }
+.mg-cell--given { background: #F4F4F8; cursor: default; }
+.mg-cell.is-on { background: var(--c, #7B61FF); }
+.mg-edge { box-shadow: inset -4px 0 0 #2B2D42; }
+.mg-edge-right { box-shadow: inset 4px 0 0 #2B2D42; }
+.mirror-grid.is-done { border-color: var(--correct); background: var(--correct); }
+.palette { display: flex; gap: .7rem; }
+.palette__swatch { width: 56px; height: 56px; border: 4px solid #fff; border-radius: 50%; background: var(--c); cursor: pointer; box-shadow: 0 0 0 3px #CFCBE6; }
+.palette__swatch.is-selected { box-shadow: 0 0 0 5px var(--ink); transform: scale(1.08); }
+
+.lines-svg { overflow: visible; }
+.sym-line { stroke: #B9B0F0; stroke-width: 5; stroke-dasharray: 6 5; cursor: pointer; }
+.sym-line:hover, .sym-line:focus { stroke: #7B61FF; outline: none; }
+.sym-line.is-chosen { stroke: var(--purple); stroke-dasharray: none; stroke-width: 6; }
+.sym-line.is-oops { stroke: var(--wrong); }
+
+/* ---------- Position grid ---------- */
+.pos-question { margin: 0; font-size: clamp(1.25rem, 4vw, 1.6rem); font-weight: 900; }
+.compass-key { font-weight: 800; color: var(--ink-soft); }
+.pos-grid { display: grid; grid-template-columns: repeat(3, 92px); gap: .6rem; padding: .8rem; border-radius: 24px; background: #E6F7EC; }
+.pos-cell { display: grid; place-items: center; height: 92px; border: 4px solid #fff; border-radius: 20px; background: #fff; font-size: 2.8rem; cursor: pointer; box-shadow: 0 5px 0 #C6E8D2; }
+.pos-cell.is-ref { border-color: var(--sun); background: #FFF6D6; }
+.pos-cell.is-right { border-color: var(--correct); background: var(--correct-soft); }
+.pos-cell.is-oops { animation: shake .45s ease; }
+.pos-grid--mini { grid-template-columns: repeat(3, 56px); gap: .35rem; }
+.pos-grid--mini .pos-cell { height: 56px; font-size: 1.8rem; cursor: default; box-shadow: none; }
+
+/* ---------- Robot ---------- */
+.robot-grid { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: min(330px, 88vw); aspect-ratio: 1; padding: 4px; border-radius: 18px; background: #C9EBB0; }
+.robot-cell { display: grid; place-items: center; border-radius: 10px; background: #E9F8DE; font-size: 1.8rem; }
+.robot-cell.is-wall { background: #D9CDB8; }
+.robot-cell.is-goal { background: #FFF2B8; }
+.robot {
+  --r: 0; --c: 0; --deg: 0deg;
+  position: absolute; left: calc(4px + var(--c) * ((100% - 8px) / 5)); top: calc(4px + var(--r) * ((100% - 8px) / 5));
+  width: calc((100% - 8px) / 5); height: calc((100% - 8px) / 5);
+  display: grid; place-items: center; transition: left .3s ease, top .3s ease;
+}
+.robot__face { font-size: 2rem; }
+.robot__dir { position: absolute; inset: 0; display: none; place-items: start center; color: var(--purple-dark); font-size: 1rem; transform: rotate(var(--deg)); transition: transform .3s ease; }
+.robot.show-dir .robot__dir { display: grid; }
+.robot.is-bump { animation: shake .45s ease; }
+.program { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem; min-height: 50px; margin: 0; padding: .5rem; border-radius: 16px; background: #F3F1FF; list-style: none; width: 100%; max-width: 520px; }
+.program__empty { color: var(--ink-soft); font-weight: 800; align-self: center; }
+.program__step { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: #fff; font-size: 1.4rem; font-weight: 900; }
+.program__step.is-running { background: var(--sun); transform: scale(1.12); }
+.robot-pad { display: flex; justify-content: center; gap: .6rem; }
+.robot-key { width: 72px; height: 68px; border: 0; border-radius: 18px; background: var(--purple); color: #fff; font-size: 2rem; font-weight: 900; cursor: pointer; box-shadow: 0 5px 0 var(--purple-dark); }
+.robot-key:active:not(:disabled) { transform: translateY(4px); box-shadow: none; }
+.robot-key:disabled { opacity: .5; cursor: default; }
+
+/* ---------- Turning dial ---------- */
+.dial { position: relative; width: 200px; height: 200px; border-radius: 50%; background: #F3F1FF; border: 4px solid #DCD6FF; }
+.dial__n, .dial__e, .dial__s, .dial__w { position: absolute; font-size: 1.5rem; }
+.dial__n { top: 4px; left: 50%; transform: translateX(-50%); }
+.dial__s { bottom: 4px; left: 50%; transform: translateX(-50%); }
+.dial__e { right: 6px; top: 50%; transform: translateY(-50%); }
+.dial__w { left: 6px; top: 50%; transform: translateY(-50%); }
+.dial__pointer {
+  --deg: 0deg;
+  position: absolute; left: 50%; top: 50%; width: 10px; height: 70px; margin-left: -5px; margin-top: -70px;
+  border-radius: 999px; background: var(--purple); transform-origin: 50% 100%; transform: rotate(var(--deg)); transition: transform .8s ease;
+}
+.dial__milo { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; }
+.sign-btn--arrow { font-size: 2rem; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 680px) {
+  .shape-cards, .shape-cards--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shape-cards--3d { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pos-grid { grid-template-columns: repeat(3, 78px); gap: .45rem; }
+  .pos-cell { height: 78px; font-size: 2.3rem; }
+  .robot-key { width: 64px; height: 60px; font-size: 1.7rem; }
+  .fold-wrap { width: 180px; height: 180px; }
+  .fold-wrap svg { width: 180px; height: 180px; }
+}
