@@ -1,0 +1,16 @@
+{
+  "name": "Math Adventure World",
+  "short_name": "Math World",
+  "description": "A colourful maths adventure for Grade 2 explorers with Milo the Maths Explorer.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#CDEEFF",
+  "theme_color": "#CDEEFF",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
