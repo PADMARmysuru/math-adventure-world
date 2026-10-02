@@ -1,0 +1,102 @@
+/* ==============================================================
+   🌳 Pattern Forest — forest.css
+   Styles shared by the Pattern Forest modules. General module styles: ../module.css
+   ============================================================== */
+
+/* ---------- Pattern rows ---------- */
+.pat-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .35rem; padding: .7rem; border-radius: 22px; background: #E7F7EE; max-width: 100%; }
+.pat-item { display: grid; place-items: center; min-width: 48px; height: 52px; font-size: 2.1rem; line-height: 1; }
+.pat-item--empty { color: #B8C9BE; }
+.pat-chunk { display: inline-flex; gap: .2rem; padding: .2rem .4rem; border: 3px dashed var(--correct); border-radius: 14px; background: #fff; animation: pop .35s ease; }
+.pat-item--btn { padding: 0 .2rem; border: 3px solid transparent; border-radius: 14px; background: #fff; cursor: pointer; }
+.pat-item--btn.is-found { border-color: var(--wrong); border-style: dashed; background: var(--wrong-soft); }
+.pat-item--btn.is-fixed { border-color: var(--correct); background: var(--correct-soft); }
+.pat-item--btn.is-oops { animation: shake .45s ease; }
+
+.unit-options { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; }
+.unit-btn { min-width: 110px; min-height: 64px; padding: 0 .8rem; border: 4px solid #CFCBE6; border-radius: 20px; background: #fff; font-size: 1.8rem; cursor: pointer; box-shadow: 0 6px 0 #CFCBE6; letter-spacing: .1em; }
+.unit-btn.is-right { border-color: var(--correct); background: var(--correct-soft); box-shadow: 0 6px 0 var(--correct); }
+.unit-btn.is-wrong { border-style: dashed; border-color: var(--wrong); background: var(--wrong-soft); box-shadow: none; opacity: .7; }
+
+/* ---------- Beads ---------- */
+.necklace { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .2rem; padding: .9rem; border-radius: 999px; background: repeating-linear-gradient(90deg, #E7F7EE 0 10px, #D7EFDF 10px 20px); }
+.bead { display: grid; place-items: center; width: 42px; height: 42px; font-size: 2rem; }
+.bead--empty { color: #9FB8A8; font-size: 1.6rem; }
+.bead.is-new { animation: pop .3s ease; }
+.bead.is-oops { animation: shake .45s ease; }
+.bead-pad { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+.bead-btn { width: 72px; height: 72px; border: 4px solid #CFCBE6; border-radius: 50%; background: #fff; font-size: 2.2rem; cursor: pointer; box-shadow: 0 5px 0 #CFCBE6; }
+.bead-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: none; }
+.bead-btn.is-right { border-color: var(--correct); background: var(--correct-soft); }
+.bead-btn.is-oops { animation: shake .45s ease; }
+.bead-btn:disabled { cursor: default; opacity: .7; }
+
+/* ---------- Gaps ---------- */
+.pat-slots { flex-wrap: wrap !important; }
+.pat-slot { display: grid; place-items: center; font-size: 1.9rem; }
+.pat-tile { display: grid; place-items: center; font-size: 2rem; background: #fff; border: 3px solid #DCD9EE; box-shadow: 0 5px 0 #DCD9EE; }
+.pat-tile svg, .pat-slot svg { pointer-events: none; }
+
+/* ---------- Predict ---------- */
+.pat-numbered { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem; margin: 0; padding: .6rem; list-style: none; border-radius: 22px; background: #E7F7EE; }
+.pat-numbered li { display: flex; flex-direction: column; align-items: center; }
+.pat-numbered small { font-weight: 900; color: var(--ink-soft); }
+.pat-numbered .is-dots { justify-content: center; font-size: 1.6rem; font-weight: 900; }
+.pat-numbered .is-ask .pat-item { border: 3px dashed var(--sun-dark); border-radius: 12px; background: #FFF6D9; }
+.pat-row--build { min-height: 70px; }
+
+/* ---------- Shape patterns ---------- */
+.sp-item { --box: 56px; display: inline-grid; place-items: center; width: var(--box); height: var(--box); }
+.sp-item svg { display: block; }
+.sp-item--ask { border: 3px dashed var(--sun-dark); border-radius: 12px; background: #FFF6D9; font-weight: 900; font-size: 1.6rem; color: var(--ink-soft); }
+.sp-options { display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem; }
+.sp-option { width: 104px; min-height: 104px; }
+.towers { display: flex; align-items: flex-end; justify-content: center; gap: .9rem; padding: .8rem 1rem; border-radius: 22px; background: #E7F7EE; min-height: 200px; }
+.tower { display: flex; flex-direction: column-reverse; align-items: center; gap: 3px; }
+.tower__block { width: 34px; height: 18px; border-radius: 4px; background: #3BB273; box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .15); }
+.tower__block--mine { background: #FF8A3D; animation: pop .25s ease; }
+.tower__count { order: -1; margin-top: .3rem; font-weight: 900; }
+.tower--mine { padding: 0 .3rem; border: 3px dashed #FF8A3D; border-radius: 12px; min-width: 46px; min-height: 40px; }
+.towers--mini { min-height: 120px; }
+.towers--mini .tower__block { width: 26px; height: 12px; }
+
+/* ---------- Clue houses ---------- */
+.clue-list { margin: 0; padding: .8rem 1.2rem; list-style: none; border-radius: 20px; background: #FFF6D6; font-weight: 900; font-size: 1.15rem; text-align: left; }
+.clue-list li + li { margin-top: .4rem; }
+.clue-houses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; width: 100%; max-width: 520px; }
+.clue-house { display: flex; flex-direction: column; align-items: center; gap: .2rem; min-height: 150px; padding: .5rem; border: 4px dashed #B9B0F0; border-radius: 22px 22px 12px 12px; background: #F6F4FF; cursor: pointer; }
+.clue-house__roof { font-size: 2rem; }
+.clue-house__label { margin: 0; font-weight: 900; font-size: .95rem; }
+.clue-house__spot { display: grid; place-items: center; min-height: 72px; }
+.clue-animal { font-size: 2.2rem; }
+
+/* ---------- Sudoku ---------- */
+.fruit-btn { width: 64px; height: 64px; border: 4px solid #fff; border-radius: 18px; background: #fff; font-size: 2rem; cursor: pointer; box-shadow: 0 0 0 3px #CFCBE6; }
+.fruit-btn.is-selected { box-shadow: 0 0 0 5px var(--purple); transform: scale(1.08); }
+.sudoku { display: grid; grid-template-columns: repeat(4, 72px); gap: 3px; padding: 6px; border-radius: 16px; background: #2B2D42; }
+.sudoku__cell { height: 72px; border: 0; border-radius: 8px; background: #fff; font-size: 2.2rem; cursor: pointer; }
+.sudoku__cell.is-given { background: #E7F7EE; cursor: default; }
+.sudoku__cell.is-filled { background: var(--correct-soft); animation: pop .3s ease; }
+.sudoku__cell.is-oops { animation: shake .45s ease; background: var(--wrong-soft); }
+.sudoku__cell.edge-r { margin-right: 4px; }
+.sudoku__cell.edge-b { margin-bottom: 4px; }
+
+/* ---------- Balance and trails ---------- */
+.equations { display: grid; gap: .5rem; }
+.equation { margin: 0; padding: .5rem 1.2rem; border-radius: 18px; background: #F3F1FF; font-size: clamp(1.6rem, 6vw, 2.2rem); font-weight: 900; }
+.trail-grid { display: grid; grid-template-columns: repeat(4, 72px); gap: .4rem; padding: .6rem; border-radius: 20px; background: #E7F7EE; }
+.trail-cell { height: 72px; border: 3px solid #fff; border-radius: 16px; background: #fff; font-size: 1.5rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #C6E8D2; }
+.trail-cell.is-on { border-color: var(--correct); background: #3BB273; color: #fff; box-shadow: 0 4px 0 #25875A; }
+.trail-cell.is-oops { animation: shake .45s ease; }
+
+@media (max-width: 680px) {
+  .pat-item { min-width: 38px; height: 44px; font-size: 1.7rem; }
+  .bead { width: 34px; height: 34px; font-size: 1.6rem; }
+  .bead-btn { width: 62px; height: 62px; font-size: 1.9rem; }
+  .sudoku { grid-template-columns: repeat(4, 62px); }
+  .sudoku__cell { height: 62px; font-size: 1.9rem; }
+  .trail-grid { grid-template-columns: repeat(4, 64px); }
+  .trail-cell { height: 64px; font-size: 1.3rem; }
+  .sp-option { width: 88px; min-height: 88px; }
+  .clue-house { min-height: 130px; }
+}

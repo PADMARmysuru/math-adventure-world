@@ -58,8 +58,10 @@ const LOCATIONS = [
     tip: 'Spot patterns and solve puzzles',
     milo: 'Pattern Forest! What comes next? Let\'s find out.',
     modules: [
-      soon('Number Patterns', '🔢'), soon('Shape Patterns', '🔷'),
-      soon('Repeating Patterns', '🔁'), soon('Logic Challenges', '🧩')
+      ready('Number Patterns', '🔢', { id: 'number-patterns', url: 'number-island/number-patterns.html', steps: 6, progressId: 'number-island/number-patterns' }),
+      ready('Shape Patterns', '🔷', { id: 'shape-patterns', url: 'pattern-forest/shape-patterns.html', steps: 6 }),
+      ready('Repeating Patterns', '🔁', { id: 'repeating-patterns', url: 'pattern-forest/repeating-patterns.html', steps: 6 }),
+      ready('Logic Challenges', '🧩', { id: 'logic-challenges', url: 'pattern-forest/logic-challenges.html', steps: 6 })
     ]
   },
   {
@@ -146,7 +148,11 @@ const BADGES = [
   { id: 'property-pro',    icon: '📐', name: 'Property Pro',    how: 'Master Shape Properties in Shape Castle' },
   { id: 'symmetry-star',   icon: '🦋', name: 'Symmetry Star',   how: 'Master Symmetry in Shape Castle' },
   { id: 'super-navigator', icon: '🧭', name: 'Super Navigator', how: 'Master Position & Direction in Shape Castle' },
-  { id: 'shape-castle-hero', icon: '🏰', name: 'Shape Castle Hero', how: 'Master every module in Shape Castle' }
+  { id: 'shape-castle-hero', icon: '🏰', name: 'Shape Castle Hero', how: 'Master every module in Shape Castle' },
+  { id: 'rhythm-ranger',   icon: '🔁', name: 'Rhythm Ranger',   how: 'Master Repeating Patterns in Pattern Forest' },
+  { id: 'shape-pattern-pro', icon: '🔷', name: 'Shape Pattern Pro', how: 'Master Shape Patterns in Pattern Forest' },
+  { id: 'logic-legend',    icon: '🧩', name: 'Logic Legend',    how: 'Master Logic Challenges in Pattern Forest' },
+  { id: 'pattern-forest-hero', icon: '🌳', name: 'Pattern Forest Hero', how: 'Master every module in Pattern Forest' }
 ];
 
 const MILO_LINES = {
@@ -367,7 +373,7 @@ function checkMilestones() {
   // Place heroes: when every module in a place is built and mastered, award "<place-id>-hero"
   LOCATIONS.forEach(loc => {
     const built = loc.modules.filter(m => m.url);
-    if (built.length && built.length === loc.modules.length && built.every(m => getModuleProgress(`${loc.id}/${m.id}`).mastered)) {
+    if (built.length && built.length === loc.modules.length && built.every(m => getModuleProgress(m.progressId || `${loc.id}/${m.id}`).mastered)) {
       unlockBadge(`${loc.id}-hero`);
     }
   });
@@ -685,11 +691,14 @@ function fillLocationDialog(loc) {
   }));
 }
 
+/** Where a module's progress is saved. A module shared by two places uses progressId. */
+const progressKey = (loc, module) => module.progressId || `${loc.id}/${module.id}`;
+
 /** Text under each module in the dialog: locked, open, in progress or mastered. */
 function moduleStateText(loc, module) {
   if (module.status !== 'ready') return '🔒 Coming Soon';
   if (!module.url) return '⭐ Open now';
-  const progress = getModuleProgress(`${loc.id}/${module.id}`);
+  const progress = getModuleProgress(progressKey(loc, module));
   if (progress.mastered) return '🏆 Mastered';
   if (progress.stages.length) return `▶ ${progress.stages.length}/${module.steps || 6} steps`;
   return '⭐ Play now';
@@ -875,7 +884,9 @@ function renderChallenge(container, challenge, { onCorrect } = {}) {
   challenge.options.forEach(option => {
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = String(option.label).length > 3 ? 'answer-btn answer-btn--text' : 'answer-btn';   // words get a smaller font
+    // words get a smaller font; numbers, emoji and pictures stay big
+    const visibleText = String(option.html ?? option.label).replace(/<[^>]+>/g, '');
+    button.className = Array.from(visibleText).length > 3 ? 'answer-btn answer-btn--text' : 'answer-btn';
     button.setAttribute('aria-label', option.label);
     button.innerHTML = `
       <span class="answer-btn__label">${option.html ?? option.label}</span>
