@@ -9,7 +9,7 @@
    🚀 Challenge  light up patterns on a hundred square
    🏆 Master     five mixed questions → Counting Master badge
 
-   Rewards, saving and Milo come from ../script.js (window.MathAdventure).
+   Rewards and saving: ../script.js.  Step bar, drag-and-drop, helpers: ../module.js.
    ============================================================== */
 'use strict';
 
@@ -19,7 +19,6 @@
 
   const MODULE_ID = 'number-island/counting';
   const STAGE_REWARD_STARS = 2;
-  const MASTER_REWARD = { stars: 5, gems: 1 };
 
   const STAGES = [
     { id: 'learn',     icon: '🌱', label: 'Learn',     title: 'Count and group',         render: renderLearn },
@@ -30,110 +29,10 @@
     { id: 'master',    icon: '🏆', label: 'Master',    title: 'Counting Master',         render: renderMaster }
   ];
 
-  /* ------------------------------------------------------------
-     Helpers
-     ------------------------------------------------------------ */
-  const $ = (s, r = document) => r.querySelector(s);
-  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const rnd = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
-  const pick = list => list[Math.floor(Math.random() * list.length)];
-  const shuffle = list => {
-    const a = [...list];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-  const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wait = ms => new Promise(resolve => setTimeout(resolve, reducedMotion() ? Math.min(ms, 120) : ms));
-  const say = text => MA.miloSay(text, 'module');
+  const K = window.ModuleKit;
+  if (!K) return;
+  const { $, $$, rnd, pick, shuffle, wait, el, button, instruction, say, makeDraggable, optionsFor, track } = K;
   const PRAISE = ['Great counting!', 'Yes!', 'Spot on!', 'Fantastic!', 'Great thinking!'];
-
-  /** Tiny element builder: el('button', { class: 'x', onclick: fn }, 'text', child) */
-  function el(tag, props = {}, ...children) {
-    const node = document.createElement(tag);
-    Object.entries(props).forEach(([key, value]) => {
-      if (value === undefined || value === null || value === false) return;
-      if (key === 'class') node.className = value;
-      else if (key === 'html') node.innerHTML = value;
-      else if (key.startsWith('on') && typeof value === 'function') node.addEventListener(key.slice(2), value);
-      else node.setAttribute(key, value === true ? '' : value);
-    });
-    children.flat().forEach(child => {
-      if (child === undefined || child === null || child === false) return;
-      node.append(child.nodeType ? child : document.createTextNode(String(child)));
-    });
-    return node;
-  }
-
-  const button = (label, cls, onclick, extra = {}) => el('button', { type: 'button', class: cls, onclick, ...extra }, label);
-  const instruction = text => el('p', { class: 'stage-instruction' }, text);
-
-  /* ------------------------------------------------------------
-     Page shell: stepper + stage card
-     ------------------------------------------------------------ */
-  let current = 0;
-
-  function renderStepper() {
-    const list = $('#stepper');
-    list.innerHTML = '';
-    STAGES.forEach((stage, i) => {
-      const done = MA.isStageDone(MODULE_ID, stage.id);
-      const step = button([
-        el('span', { class: 'step__icon', 'aria-hidden': 'true' }, done ? '✓' : stage.icon),
-        el('span', { class: 'step__label' }, stage.label)
-      ], `step${i === current ? ' is-current' : ''}${done ? ' is-done' : ''}`, () => goTo(i), {
-        'aria-current': i === current ? 'step' : null,
-        'aria-label': `${stage.label}${done ? ', done' : ''}`
-      });
-      list.append(el('li', {}, step));
-    });
-  }
-
-  function goTo(index, { scroll = true } = {}) {
-    current = index;
-    const stage = STAGES[index];
-    const isLast = index === STAGES.length - 1;
-    renderStepper();
-
-    const panel = $('#stage-panel');
-    panel.innerHTML = '';
-    const body = el('div', { class: 'stage-body' });
-    const next = button(
-      isLast ? '🗺️ Back to the map' : `Next: ${STAGES[index + 1].icon} ${STAGES[index + 1].label}`,
-      'btn btn--sun stage-next',
-      () => { if (isLast) window.location.href = '../index.html#adventure'; else goTo(index + 1); }
-    );
-    next.hidden = !MA.isStageDone(MODULE_ID, stage.id);
-
-    panel.append(
-      el('header', { class: 'stage-head' },
-        el('span', { class: 'stage-head__icon', 'aria-hidden': 'true' }, stage.icon),
-        el('div', {},
-          el('p', { class: 'stage-head__step' }, `Step ${index + 1} of ${STAGES.length} · ${stage.label}`),
-          el('h2', { class: 'stage-head__title', tabindex: '-1' }, stage.title))),
-      body,
-      el('footer', { class: 'stage-foot' }, next)
-    );
-
-    stage.render(body, () => finishStage(stage, next));
-
-    if (scroll) {
-      panel.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
-      $('.stage-head__title', panel).focus({ preventScroll: true });
-    }
-  }
-
-  function finishStage(stage, next) {
-    const first = MA.completeStage(MODULE_ID, stage.id);
-    if (first && stage.id !== 'master') MA.addStars(STAGE_REWARD_STARS, { message: `${stage.label} complete!` });
-    next.hidden = false;
-    next.classList.remove('pop-in');
-    void next.offsetWidth;
-    next.classList.add('pop-in');
-    renderStepper();
-  }
 
   /* ------------------------------------------------------------
      🌱 LEARN — tap to count, then pack into tens
@@ -360,71 +259,6 @@
      🧩 PRACTISE — drag numbers into counting order
      Works with mouse, touch (drag) and tap-tap or keyboard.
      ------------------------------------------------------------ */
-  function makeDraggable(tile, { onDrop, onTap }) {
-    let suppressClick = false;
-
-    tile.addEventListener('pointerdown', event => {
-      if (tile.disabled || event.button > 0) return;
-      const startX = event.clientX;
-      const startY = event.clientY;
-      const rect = tile.getBoundingClientRect();
-      const offsetX = startX - rect.left;
-      const offsetY = startY - rect.top;
-      let ghost = null;
-      let overSlot = null;
-      tile.setPointerCapture(event.pointerId);
-
-      const move = ev => {
-        if (!ghost && Math.hypot(ev.clientX - startX, ev.clientY - startY) > 8) {
-          ghost = tile.cloneNode(true);
-          ghost.classList.add('tile--ghost');
-          ghost.classList.remove('is-selected');
-          ghost.style.width = `${rect.width}px`;
-          ghost.style.height = `${rect.height}px`;
-          document.body.append(ghost);
-          tile.classList.add('is-lifted');
-        }
-        if (!ghost) return;
-        ghost.style.left = `${ev.clientX - offsetX}px`;
-        ghost.style.top = `${ev.clientY - offsetY}px`;
-        const under = document.elementFromPoint(ev.clientX, ev.clientY);
-        const slot = under && under.closest('.slot');
-        if (slot !== overSlot) {
-          if (overSlot) overSlot.classList.remove('is-over');
-          if (slot && !slot.disabled) slot.classList.add('is-over');
-          overSlot = slot;
-        }
-      };
-
-      const end = ev => {
-        tile.removeEventListener('pointermove', move);
-        tile.removeEventListener('pointerup', end);
-        tile.removeEventListener('pointercancel', end);
-        if (overSlot) overSlot.classList.remove('is-over');
-        tile.classList.remove('is-lifted');
-        if (ghost) {
-          ghost.remove();
-          suppressClick = true;
-          setTimeout(() => { suppressClick = false; }, 0);
-          if (ev.type === 'pointerup') {
-            const under = document.elementFromPoint(ev.clientX, ev.clientY);
-            onDrop(under && under.closest('.slot'));
-          }
-        }
-      };
-
-      tile.addEventListener('pointermove', move);
-      tile.addEventListener('pointerup', end);
-      tile.addEventListener('pointercancel', end);
-    });
-
-    // A tap (or Enter/Space) selects the tile instead
-    tile.addEventListener('click', () => {
-      if (suppressClick) { suppressClick = false; return; }
-      onTap();
-    });
-  }
-
   function renderPractise(box, done) {
     const ROUNDS = [
       { step: 1, dir: 1, label: 'Count on in 1s' },
@@ -742,17 +576,6 @@
   /* ------------------------------------------------------------
      🏆 MASTER — five mixed questions using the shared engine
      ------------------------------------------------------------ */
-  function optionsFor(answer, candidates) {
-    const values = [answer];
-    candidates.forEach(c => {
-      if (values.length < 3 && c >= 0 && c <= 100 && !values.includes(c)) values.push(c);
-    });
-    return shuffle(values).map(v => ({ value: v, label: String(v) }));
-  }
-
-  const track = (items) => `<ol class="track" aria-label="Number track">${items
-    .map(v => (v === '?' ? '<li class="is-gap" aria-label="missing number">?</li>' : `<li>${v}</li>`)).join('')}</ol>`;
-
   function qTensOnes() {
     const tens = rnd(2, 6);
     const ones = rnd(1, 9);
@@ -824,69 +647,16 @@
   }
 
   function renderMaster(box, done) {
-    const questions = [qTensOnes(), qNext(), qBefore(), qBackTens(), qOnTens()];
-    let index = 0;
-    let firstTry = 0;
-    show();
-
-    function show() {
-      box.innerHTML = '';
-      const dots = el('ol', { class: 'q-dots', 'aria-label': `Question ${index + 1} of ${questions.length}` });
-      questions.forEach((_, k) => dots.append(el('li', {
-        class: k < index ? 'is-done' : (k === index ? 'is-now' : '')
-      }, k < index ? '✓' : String(k + 1))));
-
-      const area = el('div', { class: 'challenge' });
-      const isLast = index === questions.length - 1;
-      const next = button(isLast ? '🏆 Finish' : 'Next question ▶', 'btn', () => {
-        index += 1;
-        if (index < questions.length) show(); else finale();
-      }, { hidden: true });
-
-      box.append(dots, area, el('div', { class: 'stage-actions' }, next));
-      say(index === 0 ? 'Five questions. Show me what you know!' : pick(['Keep going!', 'You can do it!', 'Nice and steady.']));
-
-      MA.renderChallenge(area, questions[index], {
-        onCorrect: ({ feedbackEl, attempts, challenge }) => {
-          if (attempts === 1) firstTry += 1;
-          feedbackEl.className = 'challenge__feedback is-success';
-          feedbackEl.innerHTML = '';
-          feedbackEl.append(el('span', {}, `🎉 ${pick(PRAISE)}`), el('small', {}, challenge.explain));
-          next.hidden = false;
-          say(pick(PRAISE));
-        }
-      });
-    }
-
-    function finale() {
-      box.innerHTML = '';
-      const first = MA.markModuleMastered(MODULE_ID);
-      if (first) {
-        MA.addStars(MASTER_REWARD.stars, { message: 'Counting mastered!' });
-        MA.addGems(MASTER_REWARD.gems, { silent: true });
-        MA.unlockBadge('counting-master');
-      } else {
-        MA.launchConfetti(60);
-      }
-      box.append(el('div', { class: 'finale' },
-        el('div', { class: 'finale__trophy', 'aria-hidden': 'true' }, '🏆'),
-        el('h3', { class: 'finale__title' }, 'Counting Master!'),
-        el('p', { class: 'finale__text' }, `${firstTry} of ${questions.length} right on the first try.`),
-        el('p', { class: 'finale__reward' }, first
-          ? `⭐ +${MASTER_REWARD.stars} stars  •  💎 +${MASTER_REWARD.gems} gem  •  🔢 New badge!`
-          : 'You already mastered Counting. Great practice!'),
-        el('div', { class: 'stage-actions' },
-          button('🔁 Play again', 'btn btn--ghost', () => renderMaster(box, done)),
-          el('a', { class: 'btn btn--sun', href: '../index.html#adventure' }, '🗺️ Back to the map'))
-      ));
-      say('You are a Counting Master! 🏆');
-      done();
-    }
+    K.runMaster(box, done, {
+      makeQuestions: () => [qTensOnes(), qNext(), qBefore(), qBackTens(), qOnTens()],
+      moduleId: MODULE_ID,
+      badgeId: 'counting-master',
+      title: 'Counting Master'
+    });
   }
 
   /* ------------------------------------------------------------
-     Start: open the first step not yet done
+     Start
      ------------------------------------------------------------ */
-  const firstOpen = STAGES.findIndex(stage => !MA.isStageDone(MODULE_ID, stage.id));
-  goTo(firstOpen === -1 ? 0 : firstOpen, { scroll: false });
+  K.startModule({ moduleId: MODULE_ID, stages: STAGES, stageStars: STAGE_REWARD_STARS });
 })();

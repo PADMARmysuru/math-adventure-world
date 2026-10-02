@@ -47,7 +47,7 @@ const LOCATIONS = [
     tip: 'Count, build and compare numbers',
     milo: 'Number Island! Numbers are hiding everywhere here.',
     modules: [
-      ready('Counting', '🔢', { id: 'counting', url: 'number-island/counting.html', steps: 6 }), soon('Place Value', '🧱'), soon('Comparing Numbers', '⚖️'),
+      ready('Counting', '🔢', { id: 'counting', url: 'number-island/counting.html', steps: 6 }), ready('Place Value', '🧱', { id: 'place-value', url: 'number-island/place-value.html', steps: 6 }), soon('Comparing Numbers', '⚖️'),
       soon('Addition', '➕'), soon('Subtraction', '➖'), soon('Multiplication', '✖️'),
       soon('Division', '➗'), soon('Fractions', '🍕'), soon('Number Patterns', '🔁')
     ]
@@ -131,7 +131,8 @@ const BADGES = [
   { id: 'gem-finder',      icon: '💎', name: 'Gem Finder',      how: 'Collect 5 gems' },
   { id: 'star-collector',  icon: '⭐', name: 'Star Collector',  how: 'Collect 25 stars' },
   { id: 'world-explorer',  icon: '🗺️', name: 'World Explorer',  how: 'Visit every place on the map' },
-  { id: 'counting-master', icon: '🔢', name: 'Counting Master', how: 'Master Counting on Number Island' }
+  { id: 'counting-master', icon: '🔢', name: 'Counting Master', how: 'Master Counting on Number Island' },
+  { id: 'place-value-pro', icon: '🧱', name: 'Place Value Pro', how: 'Master Place Value on Number Island' }
 ];
 
 const MILO_LINES = {
@@ -627,7 +628,7 @@ function fillLocationDialog(loc) {
   const daily = loc.modules.find(m => m.action === 'daily');
   let message = `${loc.name} is ready for your next adventure!`;
   if (daily) message = `${loc.name} is open! Today's challenge is waiting for you.`;
-  else if (playable.length) message = `${loc.name} has an adventure ready! Tap a ⭐ to play.`;
+  else if (playable.length) message = `${loc.name} has ${playable.length === 1 ? 'an adventure' : `${playable.length} adventures`} ready! Tap a ⭐ to play.`;
   $('#loc-message').textContent = message;
 
   $('#loc-modules').innerHTML = loc.modules.map(m => {
