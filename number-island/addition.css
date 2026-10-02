@@ -1,0 +1,72 @@
+/* ==============================================================
+   ➕ Number Island → Addition    addition.css
+   Only styles unique to this module. Shared: ../module.css
+   ============================================================== */
+
+/* ---------- Learn: ten frames ---------- */
+.frames { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .8rem; }
+.frames__plus { font-size: 2.4rem; font-weight: 900; }
+.ten-frame {
+  display: grid; grid-template-columns: repeat(5, 46px); grid-auto-rows: 46px; gap: 4px;
+  padding: 6px; border-radius: 14px; background: #2B2D42;
+}
+.tf-cell { display: grid; place-items: center; padding: 0; border: 0; border-radius: 8px; background: #fff; position: relative; }
+.tf-cell::after { content: ""; width: 72%; height: 72%; border-radius: 50%; }
+.tf-cell.has-red::after { background: #E04F4F; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .2); }
+.tf-cell.has-blue::after { background: #4D96FF; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .2); }
+button.tf-cell.has-blue { cursor: pointer; }
+button.tf-cell:disabled { cursor: default; }
+.tf-cell.is-new { animation: pop .35s ease; }
+.add-sentence { margin: 0; font-size: clamp(1.5rem, 5vw, 2.1rem); font-weight: 900; }
+.add-sentence strong { color: var(--purple-dark); }
+
+/* ---------- Play: bubbles ---------- */
+.target-badge {
+  display: inline-flex; align-items: center; gap: .6rem;
+  padding: .4rem 1.2rem; border: 4px solid var(--sun); border-radius: 999px; background: #FFF6D6;
+  font-weight: 900; font-size: 1.3rem;
+}
+.target-badge strong { font-size: 2.2rem; line-height: 1; }
+.bubbles { display: flex; flex-wrap: wrap; justify-content: center; gap: .9rem; width: 100%; max-width: 620px; padding: 1rem; border-radius: 28px; background: #DFF4FF; }
+.bubble {
+  width: 82px; height: 82px; border: 3px solid rgba(255, 255, 255, .9); border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #fff 0 14%, #9FD8F7 15% 100%);
+  color: var(--ink); font-size: 1.7rem; font-weight: 900; cursor: pointer;
+  box-shadow: 0 6px 14px rgba(43, 45, 66, .15);
+  animation: bubble-float 3.2s ease-in-out infinite; animation-delay: var(--d, 0s);
+}
+.bubble.is-selected { background: radial-gradient(circle at 32% 28%, #fff 0 14%, #FFD66B 15% 100%); outline: 4px solid var(--purple); outline-offset: 3px; }
+.bubble.is-popped { visibility: hidden; animation: none; }
+.bubble.is-oops { animation: shake .45s ease; }
+
+@keyframes bubble-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* ---------- Practise: sum cards ---------- */
+.sum-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; width: 100%; max-width: 620px; }
+.sum-card {
+  display: flex; align-items: center; justify-content: center; gap: .6rem;
+  padding: .8rem; border: 3px solid #DCD9EE; border-radius: 22px; background: #fff; box-shadow: 0 6px 0 #DCD9EE;
+}
+.sum-card__text { font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 900; white-space: nowrap; }
+.sum-slot {
+  display: grid; place-items: center;
+  width: 76px; height: 64px; border: 4px dashed #9CCFF0; border-radius: 18px; background: #F2FAFF;
+  color: var(--ink-soft); font-size: 1.7rem; font-weight: 900; cursor: pointer;
+}
+.sum-slot.is-over { border-color: var(--purple); background: var(--purple-soft); }
+.sum-slot.is-filled { border: 4px solid var(--correct); background: var(--correct-soft); color: var(--ink); animation: pop .35s ease; }
+.sum-slot.is-bad { border-color: var(--wrong); animation: shake .45s ease; }
+
+/* ---------- Challenge: target cards ---------- */
+.target-cards { display: grid; grid-template-columns: repeat(3, 84px); gap: .8rem; justify-content: center; }
+.target-card { width: 84px; height: 84px; }
+
+@media (max-width: 680px) {
+  .ten-frame { grid-template-columns: repeat(5, 36px); grid-auto-rows: 36px; gap: 3px; padding: 5px; }
+  .frames { flex-direction: column; gap: .4rem; }
+  .bubble { width: 70px; height: 70px; font-size: 1.45rem; }
+  .bubbles { gap: .6rem; padding: .8rem .5rem; }
+  .sum-cards { grid-template-columns: 1fr; }
+  .target-cards { grid-template-columns: repeat(3, 76px); }
+  .target-card { width: 76px; height: 76px; }
+}

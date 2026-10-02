@@ -47,8 +47,8 @@ const LOCATIONS = [
     tip: 'Count, build and compare numbers',
     milo: 'Number Island! Numbers are hiding everywhere here.',
     modules: [
-      ready('Counting', '🔢', { id: 'counting', url: 'number-island/counting.html', steps: 6 }), ready('Place Value', '🧱', { id: 'place-value', url: 'number-island/place-value.html', steps: 6 }), soon('Comparing Numbers', '⚖️'),
-      soon('Addition', '➕'), soon('Subtraction', '➖'), soon('Multiplication', '✖️'),
+      ready('Counting', '🔢', { id: 'counting', url: 'number-island/counting.html', steps: 6 }), ready('Place Value', '🧱', { id: 'place-value', url: 'number-island/place-value.html', steps: 6 }), ready('Comparing Numbers', '⚖️', { id: 'comparing-numbers', url: 'number-island/comparing-numbers.html', steps: 6 }),
+      ready('Addition', '➕', { id: 'addition', url: 'number-island/addition.html', steps: 6 }), soon('Subtraction', '➖'), soon('Multiplication', '✖️'),
       soon('Division', '➗'), soon('Fractions', '🍕'), soon('Number Patterns', '🔁')
     ]
   },
@@ -132,7 +132,9 @@ const BADGES = [
   { id: 'star-collector',  icon: '⭐', name: 'Star Collector',  how: 'Collect 25 stars' },
   { id: 'world-explorer',  icon: '🗺️', name: 'World Explorer',  how: 'Visit every place on the map' },
   { id: 'counting-master', icon: '🔢', name: 'Counting Master', how: 'Master Counting on Number Island' },
-  { id: 'place-value-pro', icon: '🧱', name: 'Place Value Pro', how: 'Master Place Value on Number Island' }
+  { id: 'place-value-pro', icon: '🧱', name: 'Place Value Pro', how: 'Master Place Value on Number Island' },
+  { id: 'comparing-champ', icon: '⚖️', name: 'Comparing Champ', how: 'Master Comparing Numbers on Number Island' },
+  { id: 'addition-ace',    icon: '➕', name: 'Addition Ace',    how: 'Master Addition on Number Island' }
 ];
 
 const MILO_LINES = {

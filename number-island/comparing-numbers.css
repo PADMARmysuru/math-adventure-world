@@ -1,0 +1,92 @@
+/* ==============================================================
+   ⚖️ Number Island → Comparing Numbers   comparing-numbers.css
+   Only styles unique to this module. Shared: ../module.css
+   ============================================================== */
+
+/* ---------- Learn: which is more? ---------- */
+.cmp-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+.cmp-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem;
+  min-width: 150px; min-height: 160px; padding: 1rem;
+  border: 4px solid #CFCBE6; border-radius: 26px; background: #fff; cursor: pointer;
+  box-shadow: 0 8px 0 #CFCBE6; transition: transform .15s ease;
+}
+.cmp-card:active:not(:disabled) { transform: translateY(4px); }
+.cmp-card:disabled { cursor: default; }
+.cmp-card__num { font-size: clamp(2.6rem, 9vw, 3.6rem); font-weight: 900; line-height: 1; }
+.cmp-card.is-right { border-color: var(--correct); background: var(--correct-soft); box-shadow: 0 8px 0 var(--correct); animation: celebrate .6s ease; }
+.cmp-card.is-wrong { border-style: dashed; border-color: var(--wrong); background: var(--wrong-soft); box-shadow: none; opacity: .75; animation: shake .45s ease; }
+.cmp-card.is-right::after { content: "✓ more"; font-weight: 900; color: var(--correct); }
+
+/* ---------- Signs ---------- */
+.sign-row { display: flex; align-items: center; justify-content: center; gap: .8rem; }
+.sign-num { font-size: clamp(2.8rem, 10vw, 4rem); font-weight: 900; line-height: 1; }
+.sign-gap {
+  display: grid; place-items: center;
+  width: 76px; height: 76px; border: 4px dashed var(--sun-dark); border-radius: 20px;
+  background: #FFF6D9; font-size: 2.6rem; font-weight: 900; color: var(--ink-soft);
+}
+.sign-gap.is-filled { border-style: solid; border-color: var(--purple); background: var(--purple-soft); color: var(--purple-dark); }
+.sign-pad { display: flex; justify-content: center; gap: .8rem; }
+.sign-btn {
+  width: 84px; height: 76px; border: 0; border-radius: 22px;
+  background: var(--purple); color: #fff; font-size: 2.6rem; font-weight: 900; cursor: pointer;
+  box-shadow: 0 6px 0 var(--purple-dark);
+}
+.sign-btn:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--purple-dark); }
+.sign-btn.is-right { background: var(--correct); box-shadow: 0 6px 0 #1D6E3B; }
+.sign-btn.is-wrong { background: #ECECF2; color: var(--ink-soft); box-shadow: none; text-decoration: line-through; animation: shake .45s ease; }
+.sign-btn:disabled { cursor: default; }
+.sign-key { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1rem; margin: 0; padding: 0; list-style: none; font-weight: 800; color: var(--ink-soft); }
+.sign-key strong { display: inline-grid; place-items: center; width: 1.8em; height: 1.8em; border-radius: 8px; background: var(--purple-soft); color: var(--purple-dark); }
+
+/* ---------- Play: balance scale ---------- */
+.scale { position: relative; width: 100%; max-width: 560px; padding: 1rem 0 0; }
+.beam {
+  --tilt: 0deg;
+  position: relative; display: flex; justify-content: space-between; align-items: flex-start;
+  height: 14px; margin: 0 6%; border-radius: 999px; background: #8A5A2B;
+  transform: rotate(var(--tilt)); transition: transform .6s cubic-bezier(.34, 1.56, .64, 1);
+}
+.pan {
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  min-width: 140px; min-height: 120px; margin-top: 14px; padding: .6rem .7rem;
+  border: 4px solid #C99A66; border-radius: 0 0 40px 40px; background: #FFF6E8;
+  transform: rotate(calc(var(--tilt) * -1)); transform-origin: top center;
+  transition: transform .6s cubic-bezier(.34, 1.56, .64, 1);
+}
+.pan--left { margin-left: -50px; }
+.pan--right { margin-right: -50px; }
+.pan__num { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+.scale__post { width: 0; height: 0; margin: 4px auto 0; border-left: 34px solid transparent; border-right: 34px solid transparent; border-bottom: 50px solid #8A5A2B; }
+.pan__who { padding: 0 .6em; border-radius: 999px; background: #C99A66; color: #fff; font-size: .85rem; font-weight: 900; }
+.scale__labels { display: flex; justify-content: center; align-items: center; gap: .7rem; margin-top: .6rem; font-weight: 900; }
+.scale-sentence { margin: 0; font-size: 1.3rem; font-weight: 900; }
+
+/* ---------- Practise: order ---------- */
+.order-ends { display: flex; justify-content: space-between; width: 100%; max-width: 560px; font-weight: 900; color: var(--ink-soft); }
+
+/* ---------- Challenge: digit detective ---------- */
+.digit-box { display: inline-grid; place-items: center; width: 1.1em; height: 1.2em; margin: 0 .05em; border: 3px dashed var(--sun-dark); border-radius: 10px; background: #FFF6D9; color: var(--ink-soft); }
+.digit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: .6rem; width: 100%; max-width: 560px; }
+.digit-btn {
+  min-height: 64px; border: 4px solid #CFCBE6; border-radius: 18px;
+  background: #fff; color: var(--ink); font-size: 1.6rem; font-weight: 900; cursor: pointer;
+  box-shadow: 0 5px 0 #CFCBE6;
+}
+.digit-btn[aria-pressed="true"] { border-color: var(--purple); background: var(--purple); color: #fff; box-shadow: 0 5px 0 var(--purple-dark); }
+.digit-btn[aria-pressed="true"]::after { content: " ✓"; font-size: .7em; }
+.digit-btn.is-oops { animation: shake .45s ease; }
+.digit-btn:disabled { cursor: default; }
+
+@media (max-width: 680px) {
+  .cmp-card { min-width: 130px; min-height: 140px; }
+  .sign-gap { width: 62px; height: 62px; font-size: 2.1rem; }
+  .sign-btn { width: 72px; height: 66px; font-size: 2.2rem; }
+  .pan { min-width: 112px; min-height: 104px; padding: .5rem; }
+  .pan--left { margin-left: -30px; }
+  .pan--right { margin-right: -30px; }
+  .pan__num { font-size: 1.8rem; }
+  .digit-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .45rem; }
+  .digit-btn { min-height: 56px; font-size: 1.4rem; }
+}

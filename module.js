@@ -79,6 +79,67 @@
   const track = items => `<ol class="track" aria-label="Number track">${items
     .map(v => (v === '?' ? '<li class="is-gap" aria-label="missing number">?</li>' : `<li>${v}</li>`)).join('')}</ol>`;
 
+  /** Number with a blue tens digit and an orange ones digit. */
+  const digitsHTML = n => (n >= 10 && n <= 99
+    ? `<span class="d-tens">${Math.floor(n / 10)}</span><span class="d-ones">${n % 10}</span>`
+    : String(n));
+
+  /** Small rods-and-cubes picture of a number (uses .b10 from style.css). */
+  const blocksHTML = n => `<span class="b10" aria-hidden="true">
+      <span class="b10__tens">${'<i class="rod"></i>'.repeat(Math.floor(n / 10))}</span>
+      <span class="b10__ones">${'<i class="cube"></i>'.repeat(n % 10)}</span></span>`;
+
+  /** Choice buttons (strings or numbers) for MA.renderChallenge, shuffled. */
+  const choices = list => shuffle(list).map(v => ({ value: v, label: String(v) }));
+
+  /** True/False round used by Think steps. statement: { text, truth, explain, fix?: { question, options, answer } } */
+  function trueFalse(box, statement, onSolved) {
+    const area = el('div', { class: 'tf' });
+    const result = el('div', { class: 'round-result', 'aria-live': 'polite' });
+    const buttons = el('div', { class: 'fix-options', role: 'group', 'aria-label': 'True or false' });
+    ['✅ True', '❌ False'].forEach((label, i) => {
+      const b = button(label, 'tf-btn', () => {
+        if ((i === 0) === statement.truth) {
+          b.classList.add('is-right');
+          $$('.tf-btn', buttons).forEach(x => { x.disabled = true; });
+          if (!statement.truth && statement.fix) askFix(); else finish();
+        } else {
+          b.classList.add('is-wrong');
+          b.disabled = true;
+          say(statement.truth ? 'Look again. Is it really wrong?' : 'Hmm, check it carefully. Something is not right!');
+        }
+      });
+      buttons.append(b);
+    });
+    function askFix() {
+      say(statement.fix.question);
+      const group = el('div', { class: 'fix-options', role: 'group', 'aria-label': statement.fix.question });
+      shuffle(statement.fix.options).forEach(opt => {
+        const b = button(String(opt), String(opt).length > 4 ? 'pattern-btn' : 'fix-btn', () => {
+          if (opt === statement.fix.answer) {
+            $$('button', group).forEach(x => { x.disabled = true; });
+            b.classList.add('is-right');
+            finish();
+          } else {
+            b.classList.add('is-wrong');
+            b.disabled = true;
+            say('Almost! Try another one.');
+          }
+        });
+        group.append(b);
+      });
+      result.append(el('p', { class: 'fix-q' }, `🔧 ${statement.fix.question}`), group);
+    }
+    function finish() {
+      say(statement.explain);
+      MA.launchConfetti(25);
+      result.append(el('p', { class: 'round-result__text' }, `🌟 ${statement.explain}`));
+      onSolved(result);
+    }
+    area.append(el('p', { class: 'tf-statement', html: statement.text }), buttons, result);
+    box.append(area);
+  }
+
   /* ------------------------------------------------------------
      Drag and drop that works with mouse, touch, tap-tap and keyboard.
      Drop targets are any element with class "slot".
@@ -291,7 +352,7 @@
 
   window.ModuleKit = {
     MA, $, $$, rnd, pick, shuffle, wait, reducedMotion, say, PRAISE,
-    el, button, instruction, pulse, optionsFor, track,
+    el, button, instruction, pulse, optionsFor, track, choices, digitsHTML, blocksHTML, trueFalse,
     makeDraggable, startModule, masterFinale, runMaster
   };
 })();
